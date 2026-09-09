@@ -19,7 +19,10 @@ public class MemberController {
     return "pages/member/login";
   }
 
-  //로그인 버튼 클릭시 (비동기로 중복을 확인 후 로그인 계쩡으로 넘어가면 될 듯!)
-  @PostMapping("/login")
-  public
+  //로그인 버튼 클릭시
+  // 비동기로 중복을 확인 후 !=m
+
+  //작업 내용 commit / dev로 이동/ dev내용 내려받기
+  //@PostMapping("/login")
+
 }
