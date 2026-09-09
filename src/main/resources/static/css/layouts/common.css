@@ -1,0 +1,1100 @@
+/* ==========================================================================
+   AS-FAST Common Design System
+   실시간 A/S 예약 시스템 공통 스타일시트
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Fonts & Icons Import
+   -------------------------------------------------------------------------- */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+/* --------------------------------------------------------------------------
+   2. Design Tokens (CSS Variables)
+   -------------------------------------------------------------------------- */
+:root {
+    /* Brand / Primary Colors */
+    --color-primary: #2563EB;          /* blue-600 (main) */
+    --color-primary-hover: #1D4ED8;    /* blue-700 */
+    --color-primary-light: #3B82F6;    /* blue-500 */
+    --color-primary-soft: #93C5FD;     /* blue-300 */
+    --color-primary-pale: #DBEAFE;     /* blue-100 */
+    --color-primary-bg: #EFF6FF;       /* blue-50 */
+    --color-primary-border: #BFDBFE;   /* blue-200 */
+
+    /* Accent Colors */
+    --color-accent-orange: #F97316;    /* 마감 임박, 이동 중 */
+    --color-accent-orange-bg: #FFF7ED; /* orange-50 */
+    --color-accent-orange-pale: #FED7AA; /* orange-200 */
+    --color-accent-green: #10B981;
+    --color-accent-green-bg: #ECFDF5;
+    --color-accent-red: #EF4444;
+    --color-accent-yellow: #FBBF24;
+    --color-kakao: #FEE500;
+    --color-kakao-hover: #E6CF00;
+
+    /* Neutrals */
+    --color-bg: #F7F9FC;               /* page background */
+    --color-surface: #FFFFFF;          /* card / panel background */
+    --color-surface-alt: #F9FAFB;      /* gray-50 subtle surface */
+    --color-border: #E5E7EB;           /* gray-200 default border */
+    --color-border-light: #F3F4F6;     /* gray-100 divider */
+    --color-text: #1F2937;             /* gray-800 primary text */
+    --color-text-muted: #6B7280;       /* gray-500 secondary text */
+    --color-text-subtle: #9CA3AF;      /* gray-400 hint text */
+    --color-text-disabled: #D1D5DB;    /* gray-300 disabled text */
+
+    /* Radius Scale */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;      /* rounded-2xl */
+    --radius-xl: 24px;      /* rounded-3xl */
+    --radius-pill: 9999px;
+
+    /* Spacing (Reference) */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* Shadows */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.04);
+    --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.08);
+    --shadow-primary: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+
+    /* Typography */
+    --font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    /* Transitions */
+    --transition-base: all 0.2s ease-in-out;
+    --transition-slow: all 0.3s ease-in-out;
+
+    /* Layout */
+    --container-max: 1400px;
+    --header-height: 88px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Global Reset & Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+a:hover {
+    color: var(--color-primary);
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* --------------------------------------------------------------------------
+   4. Layout Containers
+   -------------------------------------------------------------------------- */
+.container {
+    max-width: var(--container-max);
+    width: 100%;
+    margin: 0 auto;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-main {
+    flex: 1;
+}
+
+/* --------------------------------------------------------------------------
+   5. Header / Global Navigation
+   -------------------------------------------------------------------------- */
+.site-header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-sm);
+}
+
+.site-header__inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 20px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.brand-logo__tag {
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    margin-left: 4px;
+    letter-spacing: 0.1em;
+}
+
+.nav-primary {
+    display: flex;
+    gap: 40px;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.nav-primary a {
+    color: var(--color-text-muted);
+}
+
+.nav-primary a:hover,
+.nav-primary a.is-active {
+    color: var(--color-primary);
+}
+
+.nav-primary a.is-active {
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: 4px;
+}
+
+/* Footer */
+.site-footer {
+    background-color: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    margin-top: auto;
+}
+
+.site-footer__inner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+    color: var(--color-text-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   6. Buttons
+   -------------------------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 700;
+    text-align: center;
+    border-radius: var(--radius-lg);
+    padding: 14px 24px;
+    font-size: 16px;
+    line-height: 1;
+    transition: var(--transition-base);
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.btn:disabled,
+.btn.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Primary — 대표 CTA (예약, 로그인, 확정) */
+.btn-primary {
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    color: #FFFFFF;
+}
+
+/* Secondary — 흰색 아웃라인 */
+.btn-secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-xs);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-surface-alt);
+    border-color: var(--color-text-subtle);
+}
+
+/* Ghost — 배경 없음 (이전 단계 등) */
+.btn-ghost {
+    background-color: transparent;
+    color: var(--color-text-muted);
+}
+
+.btn-ghost:hover {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text);
+}
+
+/* Kakao — 간편 로그인 */
+.btn-kakao {
+    background-color: var(--color-kakao);
+    color: #000000;
+}
+
+.btn-kakao:hover {
+    background-color: var(--color-kakao-hover);
+    color: #000000;
+}
+
+/* Size Modifiers */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: var(--radius-md);
+}
+
+.btn-lg {
+    padding: 18px 40px;
+    font-size: 20px;
+    border-radius: var(--radius-lg);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+/* Icon Button (원형, 알림/전화 등) */
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    padding: 0;
+    background-color: var(--color-surface);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xs);
+}
+
+.btn-icon:hover {
+    color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+}
+
+/* --------------------------------------------------------------------------
+   7. Forms
+   -------------------------------------------------------------------------- */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.form-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.form-label--required::after {
+    content: ' *';
+    color: var(--color-accent-red);
+}
+
+.form-hint {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin-top: -4px;
+}
+
+/* Text Input & Textarea 공통 */
+.form-input,
+.form-textarea {
+    width: 100%;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    font-size: 16px;
+    font-family: inherit;
+    color: var(--color-text);
+    transition: var(--transition-base);
+    outline: none;
+}
+
+.form-input {
+    height: 56px;
+}
+
+.form-textarea {
+    min-height: 160px;
+    resize: vertical;
+    line-height: 1.6;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: var(--color-text-subtle);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-bg);
+    background-color: var(--color-surface);
+}
+
+/* Checkbox */
+.form-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+}
+
+.form-checkbox-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+/* Radio Card — 라디오 인풋 숨기고 라벨 카드 스타일 */
+.radio-card__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.radio-card {
+    display: block;
+    cursor: pointer;
+}
+
+.radio-card__body {
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-xs);
+}
+
+.radio-card:hover .radio-card__body {
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+}
+
+.radio-card__input:checked + .radio-card__body {
+    border: 2px solid var(--color-primary);
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* File Drop Zone */
+.file-dropzone {
+    border: 2px dashed var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    text-align: center;
+    background-color: var(--color-surface);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.file-dropzone:hover {
+    border-color: var(--color-primary-soft);
+    background-color: var(--color-surface-alt);
+}
+
+.file-dropzone__icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Cards & Panels
+   -------------------------------------------------------------------------- */
+.card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 24px;
+}
+
+.card-lg {
+    border-radius: var(--radius-xl);
+    padding: 40px;
+}
+
+.card-hover {
+    transition: var(--transition-base);
+    cursor: pointer;
+}
+
+.card-hover:hover {
+    border-color: var(--color-primary-soft);
+    box-shadow: var(--shadow-md);
+}
+
+.card-floating {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: 32px;
+}
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 1px solid var(--color-border-light);
+    margin: 32px 0;
+}
+
+/* --------------------------------------------------------------------------
+   9. Badges & Tags
+   -------------------------------------------------------------------------- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    line-height: 1.2;
+}
+
+.badge-primary {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    border-color: var(--color-primary-border);
+}
+
+.badge-orange {
+    background-color: var(--color-accent-orange-bg);
+    color: var(--color-accent-orange);
+    border-color: var(--color-accent-orange-pale);
+}
+
+.badge-green {
+    background-color: var(--color-accent-green-bg);
+    color: var(--color-accent-green);
+    border-color: #A7F3D0;
+}
+
+.badge-gray {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+}
+
+/* Pill (위치, 라벨) */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.pill i {
+    color: var(--color-primary);
+}
+
+/* Live-Dot 인디케이터 */
+.live-dot {
+    position: relative;
+    display: inline-flex;
+    width: 12px;
+    height: 12px;
+}
+
+.live-dot::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-primary-light);
+    opacity: 0.75;
+    animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.live-dot::after {
+    content: '';
+    position: relative;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-primary-light);
+}
+
+/* --------------------------------------------------------------------------
+   10. Progress Steps (예약 단계)
+   -------------------------------------------------------------------------- */
+.steps {
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.steps::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 24px;
+    bottom: 24px;
+    width: 2px;
+    background-color: var(--color-border);
+    z-index: 0;
+}
+
+.step {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 48px;
+    z-index: 1;
+}
+
+.step:last-child {
+    padding-bottom: 0;
+}
+
+.step__marker {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    background-color: var(--color-border);
+    color: var(--color-text-muted);
+    box-shadow: 0 0 0 8px var(--color-bg);
+    border: 2px solid var(--color-surface);
+    flex-shrink: 0;
+}
+
+.step--done .step__marker {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
+}
+
+.step--active .step__marker {
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    border: none;
+}
+
+.step__title {
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--color-text);
+    margin: 4px 0 4px;
+}
+
+.step--active .step__title {
+    color: var(--color-primary);
+}
+
+.step__desc {
+    font-size: 14px;
+    color: var(--color-text-muted);
+    margin: 0;
+}
+
+.step--done,
+.step--upcoming {
+    opacity: 0.6;
+}
+
+/* --------------------------------------------------------------------------
+   11. Time Slot (예약 시간 선택 그리드)
+   -------------------------------------------------------------------------- */
+.slot {
+    display: block;
+    padding: 20px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-xs);
+}
+
+.slot:hover {
+    border-color: var(--color-primary-soft);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.slot--selected {
+    background-color: var(--color-primary-bg);
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.slot--disabled {
+    background-color: var(--color-border-light);
+    color: var(--color-text-subtle);
+    text-decoration: line-through;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.slot--closing {
+    border: 2px solid var(--color-accent-orange);
+    color: var(--color-accent-orange);
+    font-weight: 700;
+    animation: pulse-border 2s infinite;
+}
+
+/* --------------------------------------------------------------------------
+   12. Calendar
+   -------------------------------------------------------------------------- */
+.calendar {
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+}
+
+.calendar__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.calendar__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+}
+
+.calendar__nav {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    border-radius: var(--radius-pill);
+    transition: var(--transition-base);
+    background: none;
+}
+
+.calendar__nav:hover {
+    background-color: var(--color-border-light);
+    color: var(--color-text);
+}
+
+.calendar__weekdays,
+.calendar__days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.calendar__weekdays {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+}
+
+.calendar__weekdays .is-sunday { color: var(--color-accent-red); }
+.calendar__weekdays .is-saturday { color: var(--color-primary-light); }
+
+.calendar__day {
+    padding: 12px 0;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    transition: var(--transition-base);
+}
+
+.calendar__day:hover {
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-xs);
+}
+
+.calendar__day--muted { color: var(--color-text-disabled); cursor: default; }
+.calendar__day--muted:hover { background: none; box-shadow: none; }
+
+.calendar__day--today {
+    background-color: var(--color-primary);
+    color: #FFFFFF;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.4);
+}
+
+.calendar__day--sunday { color: var(--color-accent-red); }
+.calendar__day--saturday { color: var(--color-primary-light); }
+
+/* --------------------------------------------------------------------------
+   13. KPI / Stat Card (관리자 대시보드)
+   -------------------------------------------------------------------------- */
+.kpi-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: var(--transition-base);
+}
+
+.kpi-card:hover {
+    border-color: var(--color-primary-soft);
+}
+
+.kpi-card__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.kpi-card__label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+}
+
+.kpi-card__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border-light);
+    color: var(--color-text-muted);
+    font-size: 18px;
+}
+
+.kpi-card__value {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.kpi-card__value small {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    margin-left: 4px;
+}
+
+.kpi-card__delta {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Progress bar */
+.progress {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-border-light);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+}
+
+.progress__fill {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: var(--radius-pill);
+    transition: width 0.6s ease-out;
+}
+
+/* --------------------------------------------------------------------------
+   14. Sidebar / Admin Nav
+   -------------------------------------------------------------------------- */
+.sidebar {
+    width: 280px;
+    background-color: var(--color-surface);
+    border-right: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+}
+
+.sidebar__nav {
+    flex: 1;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow-y: auto;
+}
+
+.sidebar__section-label {
+    padding: 0 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 16px 0 8px;
+}
+
+.sidebar__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: var(--transition-base);
+}
+
+.sidebar__item i {
+    width: 20px;
+    font-size: 18px;
+    color: var(--color-text-subtle);
+    transition: var(--transition-base);
+}
+
+.sidebar__item:hover {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text);
+}
+
+.sidebar__item:hover i {
+    color: var(--color-text-muted);
+}
+
+.sidebar__item.is-active {
+    background-color: var(--color-primary-bg);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.sidebar__item.is-active i {
+    color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   15. Avatar
+   -------------------------------------------------------------------------- */
+.avatar {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface-alt);
+    object-fit: cover;
+    transition: var(--transition-base);
+}
+
+.avatar-sm { width: 32px; height: 32px; }
+.avatar-lg { width: 56px; height: 56px; }
+
+.avatar-group {
+    display: inline-flex;
+}
+
+.avatar-group .avatar {
+    border: 2px solid var(--color-surface);
+    box-shadow: var(--shadow-xs);
+    margin-left: -12px;
+}
+
+.avatar-group .avatar:first-child { margin-left: 0; }
+
+/* --------------------------------------------------------------------------
+   16. Utility — Text / Layout / Color
+   -------------------------------------------------------------------------- */
+.text-primary { color: var(--color-primary); }
+.text-muted { color: var(--color-text-muted); }
+.text-subtle { color: var(--color-text-subtle); }
+.text-danger { color: var(--color-accent-red); }
+.text-warning { color: var(--color-accent-orange); }
+.text-success { color: var(--color-accent-green); }
+
+.text-bold { font-weight: 700; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+.bg-surface { background-color: var(--color-surface); }
+.bg-surface-alt { background-color: var(--color-surface-alt); }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: 8px; }
+.gap-md { gap: 16px; }
+.gap-lg { gap: 24px; }
+
+/* --------------------------------------------------------------------------
+   17. Animations
+   -------------------------------------------------------------------------- */
+@keyframes pulse-border {
+    0%   { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); }
+    70%  { box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+}
+
+@keyframes ping {
+    75%, 100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+}
+
+.animate-float          { animation: float 6s ease-in-out infinite; }
+.animate-float-delayed  { animation: float 6s ease-in-out 3s infinite; }
+.animate-pulse          { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+.animate-booking        { animation: pulse-border 2s infinite; }
+
+/* --------------------------------------------------------------------------
+   18. Scrollbar (WebKit)
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F1F1F1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* --------------------------------------------------------------------------
+   19. Responsive Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+    .nav-primary { display: none; }
+    .sidebar { width: 100%; height: auto; }
+    .container { padding-left: 20px; padding-right: 20px; }
+}
+
+@media (max-width: 640px) {
+    .card-lg { padding: 24px; }
+    .btn-lg { padding: 14px 24px; font-size: 16px; }
+    .kpi-card__value { font-size: 28px; }
+}

@@ -1,0 +1,58 @@
+.admin-header {
+  height: 88px;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-header .page-title h1 {
+  font-size: 1.5rem;
+  color: var(--color-text);
+}
+
+.admin-header .page-title p {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.admin-header .admin-menu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-menu .icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-xs);
+}
+
+.admin-menu .icon-btn:hover {
+  color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.admin-menu .icon-btn .dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent-red);
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-pill);
+}

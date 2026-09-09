@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/user_layout}">
+
+<!--이 곳에 link태그로 css파일을 연결하는 코드 작성-->
+<th:block layout:fragment="content_css">
+  <link rel="stylesheet" href="/css/pages/member/login.css">
+</th:block>
+
+<!--아래 block에 html 코드 작성-->
+<th:block layout:fragment="content">
+  <div class="login-wrap">
+    <div class="login-box card card-lg">
+      <div class="login-head">
+        <h1>로그인</h1>
+        <p>빠르고 편리한 A/S 예약을 시작해보세요.</p>
+      </div>
+
+      <form action="/member/login" method="post" id="login-form">
+        <div class="login">
+          <p>이메일</p>
+          <input type="text" class="form-control" name="memId" placeholder="example@asfast.com">
+          <p>비밀번호</p>
+          <input type="password" class="form-control" name="memPw" placeholder="비밀번호를 입력해주세요">
+          <p class="valigate-p invalid"></p>
+
+          <div class="auto-login">
+            <input type="checkbox" id="auto-login" name="autoLogin">
+            <label for="auto-login">자동 로그인</label>
+          </div>
+
+          <button type="button" class="btn btn-primary btn-lg btn-block" onclick="login()">이메일로 로그인</button>
+        </div>
+      </form>
+
+      <div class="login-link">
+        <a href="/member/join">회원가입</a>
+        <span>|</span>
+        <a href="#">이메일 찾기</a>
+        <span>|</span>
+        <a href="#">비밀번호 찾기</a>
+      </div>
+
+      <div class="divider">
+        <span>또는 간편 로그인</span>
+      </div>
+
+      <button type="button" class="btn btn-kakao btn-lg btn-block">
+        <i class="bi bi-chat-fill"></i> 카카오로 3초 만에 시작하기
+      </button>
+    </div>
+  </div>
+</th:block>
+
+<!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
+<th:block layout:fragment="content_js">
+  <script src="/js/layouts/user_header.js"></script>
+</th:block>
+</html>
