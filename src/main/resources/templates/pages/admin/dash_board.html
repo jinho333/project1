@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/admin_layout}">
+
+<!--이 곳에 link태그로 css파일을 연결하는 코드 작성-->
+<th:block layout:fragment="content_css">
+  <link rel="stylesheet" href="/css/pages/admin/dash_board.css">
+</th:block>
+
+<!--아래 block에 html 코드 작성-->
+<th:block layout:fragment="content">
+  <div class="dashboard">
+
+    <!-- 1. KPI 카드 -->
+    <div class="kpi-row">
+
+      <div class="kpi-card">
+        <div class="kpi-card__head">
+          <span class="kpi-card__label">오늘 접수</span>
+          <div class="kpi-card__icon"><i class="bi bi-file-earmark-text"></i></div>
+        </div>
+        <div class="kpi-card__value">24<small>건</small></div>
+        <div class="kpi-card__delta">
+          <i class="bi bi-arrow-up-right"></i> 어제 동시간 대비 12% 증가
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-card__head">
+          <span class="kpi-card__label">처리 완료</span>
+          <div class="kpi-card__icon green"><i class="bi bi-check2-all"></i></div>
+        </div>
+        <div class="kpi-card__value">18<small>건</small></div>
+        <div class="kpi-note">현재 진행중인 접수: <span>6건</span></div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-card__head">
+          <span class="kpi-card__label">처리율 (배정 및 완료)</span>
+          <div class="kpi-card__icon blue"><i class="bi bi-lightning-fill"></i></div>
+        </div>
+        <div class="kpi-card__value">75<small>%</small></div>
+        <div class="progress"><div class="progress__fill" style="width:75%"></div></div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-card__head">
+          <span class="kpi-card__label">평균 만족도 (최근 7일)</span>
+          <div class="kpi-card__icon orange"><i class="bi bi-star-fill"></i></div>
+        </div>
+        <div class="kpi-card__value">4.6<small>/ 5.0</small></div>
+        <div class="kpi-note">총 <span>128명</span>의 고객이 평가함</div>
+      </div>
+
+    </div>
+
+    <!-- 2. 차트 영역 -->
+    <div class="chart-row">
+
+      <!-- 좌측 : 기사별 처리 건수 -->
+      <div class="card card-lg bar-card">
+        <div class="chart-head">
+          <div>
+            <h2>기사별 처리 건수 (Top 5)</h2>
+            <p>이번 주 누적 처리 완료 기준</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm">
+            더보기 <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="bar-chart">
+          <div class="y-axis">
+            <span>40</span><span>30</span><span>20</span><span>10</span><span>0</span>
+          </div>
+          <div class="bar-list">
+            <div class="bar-item"><div class="bar" style="height:95%; background:var(--color-primary);"></div></div>
+            <div class="bar-item"><div class="bar" style="height:80%; background:var(--color-primary-light);"></div></div>
+            <div class="bar-item"><div class="bar" style="height:70%; background:#60A5FA;"></div></div>
+            <div class="bar-item"><div class="bar" style="height:60%; background:var(--color-primary-soft);"></div></div>
+            <div class="bar-item"><div class="bar" style="height:45%; background:var(--color-primary-pale);"></div></div>
+          </div>
+        </div>
+
+        <div class="bar-labels">
+          <div><p class="name">김철수</p><p class="area">강남구</p></div>
+          <div><p class="name">이영희</p><p class="area">서초구</p></div>
+          <div><p class="name">박지성</p><p class="area">송파구</p></div>
+          <div><p class="name">정우성</p><p class="area">마포구</p></div>
+          <div><p class="name">최민호</p><p class="area">용산구</p></div>
+        </div>
+      </div>
+
+      <!-- 우측 : 파이 차트 + 리뷰 -->
+      <div class="card card-lg pie-card">
+        <h2>고객 만족도 및 최근 리뷰</h2>
+        <p class="chart-sub">최근 7일 기준</p>
+
+        <div class="pie-wrap">
+          <div class="pie" style="background: conic-gradient(var(--color-primary) 0% 70%, var(--color-primary-soft) 70% 90%, var(--color-border) 90% 100%);"></div>
+          <div class="pie-legend">
+            <div><span class="dot" style="background:var(--color-primary);"></span>매우 만족 (5점)<em>70%</em></div>
+            <div><span class="dot" style="background:var(--color-primary-soft);"></span>만족 (4점)<em>20%</em></div>
+            <div><span class="dot" style="background:var(--color-border);"></span>보통 이하<em>10%</em></div>
+          </div>
+        </div>
+
+        <div class="review-list">
+          <div class="review-item">
+            <div class="review-row">
+              <p class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </p>
+              <span class="reviewer">홍*동 고객님</span>
+            </div>
+            <p class="review-text">"에어컨 수리 기사님(김철수)이 너무 친절하시고 깔끔하게 마무리해주셨어요. 시간도 잘 맞춰주셔서 감사합니다."</p>
+          </div>
+          <div class="review-item">
+            <div class="review-row">
+              <p class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                <i class="bi bi-star"></i>
+              </p>
+              <span class="reviewer">이*민 고객님</span>
+            </div>
+            <p class="review-text">"보일러 점검 빨리 와주셔서 살았습니다. 설명도 꼼꼼히 해주셨네요."</p>
+          </div>
+          <div class="review-item last">
+            <div class="review-row">
+              <p class="stars">
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </p>
+              <span class="reviewer">박*영 고객님</span>
+            </div>
+            <p class="review-text">"시간 약속 칼이시고 정말 프로페셔널 하십니다. 만족해요!"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. 캘린더 -->
+    <div class="card card-lg calendar-card">
+      <div class="chart-head">
+        <div>
+          <h2>전체 예약 현황 캘린더</h2>
+          <p>에어컨/보일러 제품별 예약 블록 시각화</p>
+        </div>
+        <div class="calendar-ctrl">
+          <div class="legend-mini">
+            <span><span class="mini-dot blue"></span> 에어컨</span>
+            <span><span class="mini-dot orange"></span> 보일러</span>
+          </div>
+          <div class="view-tab">
+            <button type="button" class="active">월간</button>
+            <button type="button">주간</button>
+          </div>
+          <div class="month-nav">
+            <button type="button"><i class="bi bi-chevron-left"></i></button>
+            <span>2026. 09</span>
+            <button type="button"><i class="bi bi-chevron-right"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="full-cal">
+        <div class="full-cal-head">
+          <div class="is-sunday">일</div>
+          <div>월</div><div>화</div><div>수</div><div>목</div><div>금</div>
+          <div class="is-saturday">토</div>
+        </div>
+        <div class="full-cal-body">
+          <div class="cell muted"><span class="d">30</span></div>
+          <div class="cell muted"><span class="d">31</span></div>
+          <div class="cell">
+            <span class="d">1</span>
+            <div class="events">
+              <div class="event blue">10:00 에어컨 수리 (김철수)</div>
+              <div class="event blue">14:00 에어컨 점검 (이영희)</div>
+            </div>
+          </div>
+          <div class="cell"><span class="d">2</span></div>
+          <div class="cell">
+            <span class="d">3</span>
+            <div class="events">
+              <div class="event orange">09:00 보일러 (박지성)</div>
+              <div class="event orange">15:30 보일러 (박지성)</div>
+            </div>
+          </div>
+          <div class="cell"><span class="d">4</span></div>
+          <div class="cell"><span class="d sat">5</span></div>
+
+          <div class="cell"><span class="d sun">6</span></div>
+          <div class="cell"><span class="d">7</span></div>
+          <div class="cell today">
+            <div class="cell-head">
+              <span class="d today-badge">8</span>
+              <span class="today-tag">오늘</span>
+            </div>
+            <div class="events">
+              <div class="event blue">09:00 에어컨 (최민호) <em class="done-tag">완료</em></div>
+              <div class="event blue current">10:00 에어컨 (김철수) <em class="moving-tag">이동중</em></div>
+              <div class="event orange">13:00 보일러 (박지성)</div>
+              <div class="event blue">15:30 에어컨 (이영희)</div>
+              <div class="event gray">16:30 기타 (정우성)</div>
+            </div>
+          </div>
+          <div class="cell"><span class="d">9</span></div>
+          <div class="cell">
+            <span class="d">10</span>
+            <div class="events"><div class="event blue">11:00 에어컨 (최민호)</div></div>
+          </div>
+          <div class="cell"><span class="d">11</span></div>
+          <div class="cell"><span class="d sat">12</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</th:block>
+
+<!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
+<th:block layout:fragment="content_js">
+  <script src="/js/pages/admin/dash_board.js"></script>
+</th:block>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AS-FAST ADMIN</title>
+  <link rel="stylesheet" href="/css/layouts/common.css">
+  <link rel="stylesheet" href="/css/layouts/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/layouts/admin_layout.css">
+  <link rel="stylesheet" href="/css/layouts/admin_header.css">
+  <link rel="stylesheet" href="/css/layouts/admin_side.css">
+  <th:block layout:fragment="content_css"/>
+</head>
+<body>
+  <div class="admin-container">
+    <div class="admin-main">
+      <div class="admin-side">
+        <th:block th:replace="~{layouts/admin_side::sideFragment}"/>
+      </div>
+      <div style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+        <div class="admin-header">
+          <th:block th:replace="~{layouts/admin_header::headerFragment}"/>
+        </div>
+        <div class="admin-content">
+          <th:block layout:fragment="content"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/js/layouts/common.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.13.2/dist/axios.min.js"></script>
+  <th:block layout:fragment="content_js"/>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/user_layout}">
+
+<!--이 곳에 link태그로 css파일을 연결하는 코드 작성-->
+<th:block layout:fragment="content_css">
+  <link rel="stylesheet" href="/css/pages/reserve/reserve_detail.css">
+</th:block>
+
+<!--아래 block에 html 코드 작성-->
+<th:block layout:fragment="content">
+  <div class="detail-page">
+
+    <!-- 상단 페이지 헤더 -->
+    <div class="detail-top">
+      <div class="detail-title">
+        <a href="/reserve/list" class="back-btn"><i class="bi bi-arrow-left"></i></a>
+        <h1>
+          예약 상세 정보
+          <span class="badge badge-orange">기사 이동 중</span>
+        </h1>
+      </div>
+    </div>
+
+    <div class="detail-body">
+
+      <!-- 좌측 : 진행 타임라인 -->
+      <div class="timeline-box card card-lg">
+        <h2 class="timeline-head">실시간 진행 현황</h2>
+
+        <div class="timeline">
+          <!-- 진행된 라인 -->
+          <div class="timeline-line"></div>
+          <div class="timeline-line-done"></div>
+
+          <!-- Step 1 -->
+          <div class="tl-item">
+            <div class="tl-marker done"><i class="bi bi-check-lg"></i></div>
+            <div class="tl-content">
+              <h4>예약 접수 완료</h4>
+              <p class="tl-time">오늘 09:10</p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="tl-item">
+            <div class="tl-marker done"><i class="bi bi-check-lg"></i></div>
+            <div class="tl-content">
+              <h4>엔지니어 배정 완료</h4>
+              <p class="tl-time">오늘 09:15</p>
+            </div>
+          </div>
+
+          <!-- Step 3 : 현재 상태 -->
+          <div class="tl-item">
+            <div class="tl-marker current">
+              <span class="tl-ping"></span>
+              <i class="bi bi-truck"></i>
+            </div>
+            <div class="tl-content">
+              <h4 class="active">고객님 댁으로 이동 중</h4>
+              <p class="tl-time bold">도착 예정 시간: 10:00</p>
+
+              <div class="tl-callout">
+                <i class="bi bi-cursor-fill"></i>
+                <div>
+                  <p class="callout-title">현재 위치: 강남역 사거리 부근</p>
+                  <p class="callout-desc">교통 상황에 따라 5~10분 정도 차이가 발생할 수 있습니다.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="tl-item">
+            <div class="tl-marker upcoming"></div>
+            <div class="tl-content">
+              <h4 class="upcoming">도착 및 수리 진행</h4>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="tl-item">
+            <div class="tl-marker upcoming"></div>
+            <div class="tl-content">
+              <h4 class="upcoming">수리 완료</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 우측 : 기사 정보 & 예약 상세 -->
+      <div class="detail-right">
+
+        <!-- 기사님 정보 카드 -->
+        <div class="driver-card card card-lg">
+          <div class="driver-info-lg">
+            <img src="https://placehold.co/150x150/e2e8f0/64748b?text=KIM">
+            <div>
+              <div class="tag-row">
+                <h3>김철수 엔지니어</h3>
+                <span class="badge badge-gray">본사 직영 전문기사</span>
+              </div>
+              <p class="rate-info">
+                <i class="bi bi-star-fill"></i>
+                <span class="score">4.9</span>
+                <span class="cnt">(누적 수리 128건)</span>
+              </p>
+            </div>
+          </div>
+          <button type="button" class="phone-btn">
+            <i class="bi bi-telephone-fill"></i>
+          </button>
+        </div>
+
+        <!-- 예약 상세 정보 카드 -->
+        <div class="info-card card card-lg">
+          <div class="info-head">
+            <h3>예약 상세 내역</h3>
+            <span class="reserve-no">#AS-98274</span>
+          </div>
+
+          <div class="info-list">
+            <div class="info-row">
+              <p class="label">대상 제품</p>
+              <p class="value">
+                <i class="bi bi-snow2"></i> 에어컨 (벽걸이)
+              </p>
+            </div>
+
+            <div class="info-row">
+              <p class="label">상세 증상</p>
+              <div class="value symptom-box">
+                냉방이 전혀 안되고 미지근한 바람만 나옵니다.<br>
+                실외기는 돌아가는 것 같은데 평소보다 덜덜거리는 소음이 심하게 발생합니다. 확인 부탁드립니다.
+              </div>
+            </div>
+
+            <div class="info-row">
+              <p class="label">방문 주소</p>
+              <div class="value">
+                <p class="addr-main">서울 강남구 테헤란로 123</p>
+                <p class="addr-sub">강남아파트 101동 202호</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 액션 버튼 -->
+        <div class="detail-btn-div">
+          <button type="button" class="btn btn-secondary btn-lg">예약 취소하기</button>
+          <button type="button" class="btn btn-lg" disabled>정보 수정 불가 (기사 이동중)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+<!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
+<th:block layout:fragment="content_js">
+</th:block>
+</html>

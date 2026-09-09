@@ -1,0 +1,33 @@
+.user-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-content {
+  flex: 1;
+  padding: 40px 32px;
+}
+
+.user-footer {
+  border-top: 1px solid var(--color-border);
+  padding: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.9rem;
+  color: var(--color-text-subtle);
+}
+
+.user-footer .footer-menu {
+  display: flex;
+  gap: 24px;
+}
+
+.user-footer .footer-menu a:hover {
+  color: var(--color-text-muted);
+}

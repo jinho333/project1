@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+  <th:block th:fragment="headerFragment">
+    <div class="header-container">
+      <div class="header-inner">
+        <!-- 로고 -->
+        <div class="logo-div">
+          <i class="bi bi-tools"></i> AS-FAST
+        </div>
+
+        <!-- 글로벌 네비게이션 -->
+        <ul class="menu">
+          <li><a href="/">홈</a></li>
+          <li><a href="/reserve/form">A/S 예약</a></li>
+          <li><a href="/reserve/list">내 예약 조회</a></li>
+          <li><a href="#">이용안내</a></li>
+        </ul>
+
+        <!-- 우측 유저 영역 -->
+        <div class="user-info">
+          <span class="location-pill">
+            <i class="bi bi-geo-alt-fill"></i> 서울 강남구
+          </span>
+
+          <th:block th:if="${session.loginInfo != null}">
+            <div class="profile-div">
+              <img src="https://placehold.co/100x100/e2e8f0/64748b?text=U">
+              <span class="name">[[${session.loginInfo.memName}]] 님</span>
+            </div>
+          </th:block>
+
+          <th:block th:if="${session.loginInfo == null}">
+            <a href="/member/login" class="btn btn-secondary btn-sm">로그인</a>
+          </th:block>
+        </div>
+      </div>
+    </div>
+  </th:block>
+</html>
