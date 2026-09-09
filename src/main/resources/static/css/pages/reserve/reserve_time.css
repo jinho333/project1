@@ -96,3 +96,8 @@
   margin-top: 40px;
   padding-top: 40px;
 }
+
+#calendar {
+    height: 400px;
+    max-width: 100%;
+}
