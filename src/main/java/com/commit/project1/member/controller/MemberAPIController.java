@@ -20,7 +20,7 @@ public class MemberAPIController {
   public MemberDTO Login(MemberDTO memberDTO, HttpServletRequest request){
     //로그인 조회!
     MemberDTO loginInfo = memberService.memberLoginCheck(memberDTO);
-    System.out.println(loginInfo);
+    //로그인 정보가 있다면 로그인 가능!
     if (loginInfo != null){
       HttpSession session = request.getSession();
       session.setAttribute("loginInfo", loginInfo);
