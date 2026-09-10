@@ -84,12 +84,17 @@ public class ReserveController {
     }
   }
 
+  //예약 완료
   @GetMapping("/complete-page")
   public String completePage() {
     return "pages/reserve/reserve_complete";
   }
 
-
+  //예약 조회
+  @GetMapping("/list")
+  public String reserveList(){
+    return "pages/reserve/reserve_list";
+  }
 
 
 }
