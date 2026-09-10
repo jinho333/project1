@@ -103,11 +103,14 @@
           <!-- 사진 첨부 -->
           <section class="form-section">
             <h3 class="sub-h3">현장 사진이 있다면 첨부해주세요 (선택)</h3>
-            <div class="file-dropzone">
-              <div class="file-dropzone__icon"><i class="bi bi-camera-fill"></i></div>
-              <p class="drop-title">클릭하거나 사진을 이곳으로 드래그 하세요.</p>
-              <p class="drop-desc">에러 코드가 표시된 디스플레이, 파손 부위 등 (최대 3장)</p>
-            </div>
+            <label for="attach">
+              <div class="file-dropzone">
+                <div class="file-dropzone__icon"><i class="bi bi-camera-fill"></i></div>
+                <p class="drop-title">클릭하거나 사진을 이곳으로 드래그 하세요.</p>
+                <p class="drop-desc">에러 코드가 표시된 디스플레이, 파손 부위 등 (최대 3장)</p>
+                <input type="file" style="display: none;" id="attach">
+              </div>
+            </label>
           </section>
 
           <hr class="divider">
