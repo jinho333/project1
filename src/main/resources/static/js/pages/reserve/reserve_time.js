@@ -1,50 +1,50 @@
 // reserve_time.js
-
+//콜백(초기화 함수)
 document.addEventListener("DOMContentLoaded", function () {
-  const calendarEl = document.getElementById("calendar");
+  const calendarEl = document.getElementById("calendar");  // calendar 요소 담기
 
-  if (!calendarEl) {
+  if (!calendarEl) { // calendar 요소를 참조 못했다면
     console.error("❌ #calendar 요소를 찾을 수 없습니다.");
     return;
   }
 
   // 오늘 날짜를 기본 선택값으로 설정
   const today = new Date();
-  let selectedDate = formatDate(today);   // "2026-09-10"
+  let selectedDate = formatDate(today);   // 2026-09-10" 형식 문자열로 저장
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
     locale: "ko",
     selectable: true,
-    dateClick: function (info) {
-      selectedDate = info.dateStr;
-      console.log("✅ 선택한 날짜:", selectedDate);
+    dateClick: function (info) {  // 사용자가 날자 셀 클릭하면 실행할 함수 등록
+      selectedDate = info.dateStr;  // 클릭한 날짜를 selectDate에 저장
+      console.log("✅ 선택한 날짜:", selectedDate); 
 
       // hidden input에 선택한 날짜 저장
       document.getElementById("reserveDateInput").value = selectedDate;
 
-      // 슬롯 헤더 날짜 갱신
+      // 슬롯 헤더 날짜 갱신 (밑에 있는 함수 실행)
       updateSlotHeader(selectedDate);
 
-      // 슬롯 그리드 갱신
+      // 슬롯 그리드 갱신 (밑에 있는 함수 실행)
       loadAvailableTimes(selectedDate);
     },
   });
 
-  calendar.render();
+  calendar.render();  // 캘린더 화면에 그리기
   console.log("✅ 캘린더 렌더링 완료!");
 
   // 페이지 진입 시 오늘 날짜로 초기화
-  document.getElementById("reserveDateInput").value = selectedDate;
-  updateSlotHeader(selectedDate);
+  document.getElementById("reserveDateInput").value = selectedDate;  // 날짜 가져가는 input에 오늘 날짜 넣어놓음
+  updateSlotHeader(selectedDate);  
   loadAvailableTimes(selectedDate);
 });
 
 
-// ✅ Date → "yyyy-MM-dd" 문자열 변환
+// ✅ Date → "yyyy-MM-dd" 문자열 변환 (db가 원하는 형태)
 function formatDate(date) {
   const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0"); //앞자리가 한 자리면 0채워서 두자리로
   const dd = String(date.getDate()).padStart(2, "0");
   return `${yyyy}-${mm}-${dd}`;
 }
@@ -55,18 +55,18 @@ function updateSlotHeader(dateStr) {
   const headerEl = document.getElementById("slotDateTitle");
   if (!headerEl) return;
 
-  const date = new Date(dateStr);
-  const month = date.getMonth() + 1;
+  const date = new Date(dateStr); //문자열을 다시 date 객체로 변환
+  const month = date.getMonth() + 1;  
   const day = date.getDate();
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
-  const weekday = weekdays[date.getDay()];
+  const weekday = weekdays[date.getDay()]; 
 
   headerEl.innerHTML = `${month}월 ${day}일 (${weekday}) <span class="badge badge-primary">오늘</span>`;
 }
 
 
 // ✅ [임시] 서버 API 대신 더미 데이터로 슬롯 그림
-async function loadAvailableTimes(date) {
+async function loadAvailableTimes(date) {  //예약 가능 시간 조회
   // 전체 시간 슬롯
   const allTimes = [
     "09:00", "09:30", "10:00", "10:30",
@@ -157,23 +157,24 @@ function goComplete() {
   // 4. 폼 전송
   document.getElementById("reserve-time-form").submit();
 }
+
 //예약 확정 유효성 검사
-const reserveTimeValigate = () => {
-  const time = document.querySelector('input[name="time"]:checked');
+// const reserveTimeValigate = () => {
+//   const time = document.querySelector('input[name="time"]:checked');
 
-  document.querySelector('#timeP').textContent = '';
+//   document.querySelector('#timeP').textContent = '';
 
-  if(time == null){
-    document.querySelector('#timeP').textContent = '방문 시간을 선택해주세요.';
-    return false;
-  }
-  return true;
-}
+//   if(time == null){
+//     document.querySelector('#timeP').textContent = '방문 시간을 선택해주세요.';
+//     return false;
+//   }
+//   return true;
+// }
 
 //예약 확정하기 버튼 클릭시
-const goComplete = () => {
-  const result = reserveTimeValigate();
-  if(result){
-    document.querySelector('#reserve-time-form').submit();
-  }
-}
+// const goComplete = () => {
+//   const result = reserveTimeValigate();
+//   if(result){
+//     document.querySelector('#reserve-time-form').submit();
+//   }
+// }
