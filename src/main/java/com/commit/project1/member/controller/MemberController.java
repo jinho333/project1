@@ -1,6 +1,8 @@
 package com.commit.project1.member.controller;
 
 import com.commit.project1.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,15 @@ public class MemberController {
   @GetMapping("/login-form")
   public String loginForm(){
     return "pages/member/login";
+  }
+
+  //로그아웃
+  @GetMapping("/logout")
+  public String logout(HttpServletRequest request){
+    HttpSession session = request.getSession(); // 세션 생성
+    session.invalidate();  //세션 초기화
+
+    return "redirect:/";
   }
 
 }
