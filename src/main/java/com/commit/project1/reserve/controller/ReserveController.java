@@ -1,10 +1,13 @@
 package com.commit.project1.reserve.controller;
 
+import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
 import com.commit.project1.reserve.service.ReserveService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -19,7 +22,11 @@ public class ReserveController {
 
   //예약 정보 입력 관련 컨트롤러
   @GetMapping("/form")
-  public String reserveForm(){
+  public String reserveForm(HttpServletRequest request, Model model){
+
+    //로그인한 회원 주소 (세션에서 아이디를 찾자!)
+    HttpSession session = request.getSession();
+
     return "pages/reserve/reserve_form";
   }
 

@@ -46,40 +46,38 @@
     <div class="reserve-main">
       <form action="/reserve/form-submit" method="post" id="reserve-form">
         <div class="card card-lg">
-
           <!-- Q1. 기기 선택 -->
           <section class="form-section">
             <h3><span class="q-mark">Q.</span> 어떤 기기에 문제가 있나요?</h3>
-
+            
             <div class="cate-tab">
-              <button type="button" class="tab active">냉방 기기</button>
-              <button type="button" class="tab">난방 기기</button>
+              <button type="button" class="tab active" name="productType" value="냉방">냉방 기기</button>
+              <button type="button" class="tab" name="productType"  value="냉방">난방 기기</button>
             </div>
-
             <div class="product-grid">
               <label class="radio-card">
-                <input type="radio" name="product" value="AC" class="radio-card__input" checked>
+                <input type="radio" name="categoryNo" value="1" class="radio-card__input" checked>
                 <div class="radio-card__body product-card">
                   <i class="bi bi-snow2"></i>
                   <span>에어컨</span>
                 </div>
               </label>
               <label class="radio-card">
-                <input type="radio" name="product" value="OUT" class="radio-card__input">
+                <input type="radio" name="categoryNo" value="2" class="radio-card__input">
                 <div class="radio-card__body product-card">
                   <i class="bi bi-fan"></i>
                   <span>실외기</span>
                 </div>
               </label>
               <label class="radio-card">
-                <input type="radio" name="product" value="DEHUM" class="radio-card__input">
+                <input type="radio" name="categoryNo" value="4" class="radio-card__input">
                 <div class="radio-card__body product-card">
                   <i class="bi bi-wind"></i>
-                  <span>제습기</span>
+                  <span>제습</span>
                 </div>
               </label>
               <label class="radio-card">
-                <input type="radio" name="product" value="ETC" class="radio-card__input">
+                <input type="radio" name="categoryNo" value="5" class="radio-card__input">
                 <div class="radio-card__body product-card">
                   <i class="bi bi-three-dots"></i>
                   <span>기타 기기</span>
@@ -88,7 +86,6 @@
             </div>
             <p id="productP" class="valigate-p invalid"></p>
           </section>
-
           <hr class="divider">
 
           <!-- Q2. 증상 -->
