@@ -5,7 +5,7 @@
 .time-wrap {
   display: flex;
   gap: 48px;
-  padding: 40px !important;
+  padding: 40px;
 }
 
 .calendar-area {
@@ -28,7 +28,7 @@
 
 
 /* =========================================================
-   슬롯 헤더 (날짜 + 범례)
+   슬롯 헤더
    ========================================================= */
 
 .slot-head {
@@ -57,53 +57,30 @@
 }
 
 
-/* 범례 (선택 가능 / 마감) */
-.slot-legend {
-  display: flex;
-  gap: 16px;
-  padding: 10px 16px;
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.slot-legend span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-}
-
-.dot-avail {
-  border: 2px solid var(--color-primary);
-  background: var(--color-surface);
-}
-
-.dot-close {
-  background: var(--color-border);
-}
-
-.slot-legend span:last-child {
-  color: var(--color-text-subtle);
-}
-
-
 /* =========================================================
    슬롯 그리드
    ========================================================= */
 
 .slot-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
   margin-bottom: auto;
+}
+
+.slot {
+  position: relative;
+  padding: 10px 6px;
+  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color 0.18s ease,
+              color 0.18s ease,
+              border-color 0.18s ease,
+              box-shadow 0.18s ease;
 }
 
 .slot-label {
@@ -117,32 +94,54 @@
   pointer-events: none;
 }
 
-.slot {
-  position: relative;
+.slot:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-border);
 }
 
 
 /* =========================================================
-   마감 임박 슬롯 (13:00 등)
+   선택된 슬롯 강조
+   ========================================================= */
+
+.slot-input:checked + .slot {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
+  font-weight: 700;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+.slot-input:checked + .slot:hover {
+  background-color: var(--color-primary-hover);
+  color: #FFFFFF;
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
+}
+
+
+/* =========================================================
+   마감 임박 슬롯
    ========================================================= */
 
 .slot--closing {
   position: relative;
-  border: 2px solid var(--color-accent-orange);
+  border: 1px solid var(--color-accent-orange);
   color: var(--color-accent-orange);
   font-weight: 700;
+  background-color: var(--color-accent-orange-bg);
   animation: pulse-border 2s infinite;
 }
 
 .closing-tag {
   position: absolute;
-  top: -12px;
-  right: -6px;
+  top: -10px;
+  right: -4px;
   background: var(--color-accent-orange);
   color: #FFF;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-xs);
   display: inline-flex;
@@ -153,46 +152,25 @@
 
 
 /* =========================================================
-   ✅ 예약 마감 슬롯 (선택 불가)
-   - JS에서 라디오 버튼을 생성하지 않으므로 클릭 자체가 불가
-   - 시각적으로 확실히 구분되도록 회색 + 취소선 + "마감" 배지
+   예약 불가 슬롯
    ========================================================= */
 
 .slot--disabled {
-  background-color: #F3F4F6;              /* 연한 회색 배경 */
-  color: var(--color-text-subtle);        /* 흐린 텍스트 */
-  border: 1px dashed var(--color-border); /* 점선 테두리 */
-  text-decoration: line-through;          /* 취소선 */
-  cursor: not-allowed;                    /* 클릭 금지 커서 */
+  background-color: #F3F4F6;
+  color: var(--color-text-subtle);
+  border: 1px solid transparent;
+  text-decoration: line-through;
+  cursor: not-allowed;
   box-shadow: none;
-  transform: none;
-  opacity: 0.75;
+  opacity: 0.55;
   position: relative;
 }
 
-/* hover 시에도 아무 효과 없음 (마감 슬롯이므로) */
 .slot--disabled:hover {
   background-color: #F3F4F6;
-  border-color: var(--color-border);
+  border-color: transparent;
   color: var(--color-text-subtle);
   box-shadow: none;
-  transform: none;
-}
-
-/* 마감 배지 (우측 상단) */
-.slot--disabled::after {
-  content: "마감";
-  position: absolute;
-  top: -8px;
-  right: -4px;
-  background: var(--color-accent-red);
-  color: #FFF;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  z-index: 2;
 }
 
 
@@ -207,10 +185,16 @@
 
 
 /* =========================================================
-   FullCalendar 컨테이너 높이
+   FullCalendar 상단 툴바 버튼 크기 조정
+   - 로
    ========================================================= */
 
-#calendar {
-  height: 400px;
-  max-width: 100%;
+.fc .fc-button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.fc .fc-today-button {
+  padding: 4px 10px;
+  font-size: 0.8rem;
 }
