@@ -21,7 +21,8 @@ const login = () => {
   const result = loginValigate(memId, memPw);
 
   if(result){
-    axios.get(`/member-api/login?memId=${memId}&memPw=${memPw}`)
+    axios
+    .get(`/member-api/login?memId=${memId}&memPw=${memPw}`)
     .then(response => {
       if(response.data === ''){
         document.querySelector('.login .valigate-p').textContent='아이디 또는 비밀번호를 잘못 입력했습니다.'
