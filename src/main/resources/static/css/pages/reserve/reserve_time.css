@@ -1,3 +1,7 @@
+/* =========================================================
+   예약 시간 선택 페이지 레이아웃
+   ========================================================= */
+
 .time-wrap {
   display: flex;
   gap: 48px;
@@ -22,6 +26,11 @@
   min-width: 0;
 }
 
+
+/* =========================================================
+   슬롯 헤더 (날짜 + 범례)
+   ========================================================= */
+
 .slot-head {
   display: flex;
   justify-content: space-between;
@@ -42,8 +51,13 @@
   margin-bottom: 8px;
 }
 
-.slot-head p { color: var(--color-text-muted); font-size: 1rem; }
+.slot-head p {
+  color: var(--color-text-muted);
+  font-size: 1rem;
+}
 
+
+/* 범례 (선택 가능 / 마감) */
 .slot-legend {
   display: flex;
   gap: 16px;
@@ -54,13 +68,37 @@
   font-size: 0.85rem;
   font-weight: 500;
 }
-.slot-legend span { display: flex; align-items: center; gap: 6px; }
-.dot { width: 12px; height: 12px; border-radius: 3px; }
-.dot-avail { border: 2px solid var(--color-primary); background: var(--color-surface); }
-.dot-close { background: var(--color-border); }
-.slot-legend span:last-child { color: var(--color-text-subtle); }
 
-/* 슬롯 그리드 */
+.slot-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.dot-avail {
+  border: 2px solid var(--color-primary);
+  background: var(--color-surface);
+}
+
+.dot-close {
+  background: var(--color-border);
+}
+
+.slot-legend span:last-child {
+  color: var(--color-text-subtle);
+}
+
+
+/* =========================================================
+   슬롯 그리드
+   ========================================================= */
+
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -68,11 +106,33 @@
   margin-bottom: auto;
 }
 
-.slot-label { display: block; cursor: pointer; }
-.slot-input { position: absolute; opacity: 0; pointer-events: none; }
+.slot-label {
+  display: block;
+  cursor: pointer;
+}
 
-.slot { position: relative; }
-.slot--closing { position: relative; }
+.slot-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.slot {
+  position: relative;
+}
+
+
+/* =========================================================
+   마감 임박 슬롯 (13:00 등)
+   ========================================================= */
+
+.slot--closing {
+  position: relative;
+  border: 2px solid var(--color-accent-orange);
+  color: var(--color-accent-orange);
+  font-weight: 700;
+  animation: pulse-border 2s infinite;
+}
 
 .closing-tag {
   position: absolute;
@@ -91,13 +151,66 @@
   z-index: 2;
 }
 
-/* 하단 버튼 영역 (재정의) */
+
+/* =========================================================
+   ✅ 예약 마감 슬롯 (선택 불가)
+   - JS에서 라디오 버튼을 생성하지 않으므로 클릭 자체가 불가
+   - 시각적으로 확실히 구분되도록 회색 + 취소선 + "마감" 배지
+   ========================================================= */
+
+.slot--disabled {
+  background-color: #F3F4F6;              /* 연한 회색 배경 */
+  color: var(--color-text-subtle);        /* 흐린 텍스트 */
+  border: 1px dashed var(--color-border); /* 점선 테두리 */
+  text-decoration: line-through;          /* 취소선 */
+  cursor: not-allowed;                    /* 클릭 금지 커서 */
+  box-shadow: none;
+  transform: none;
+  opacity: 0.75;
+  position: relative;
+}
+
+/* hover 시에도 아무 효과 없음 (마감 슬롯이므로) */
+.slot--disabled:hover {
+  background-color: #F3F4F6;
+  border-color: var(--color-border);
+  color: var(--color-text-subtle);
+  box-shadow: none;
+  transform: none;
+}
+
+/* 마감 배지 (우측 상단) */
+.slot--disabled::after {
+  content: "마감";
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  background: var(--color-accent-red);
+  color: #FFF;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  z-index: 2;
+}
+
+
+/* =========================================================
+   하단 버튼 영역
+   ========================================================= */
+
 .slot-area .form-footer {
   margin-top: 40px;
   padding-top: 40px;
 }
 
+
+/* =========================================================
+   FullCalendar 컨테이너 높이
+   ========================================================= */
+
 #calendar {
-    height: 400px;
-    max-width: 100%;
+  height: 400px;
+  max-width: 100%;
 }

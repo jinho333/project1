@@ -3,18 +3,23 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/user_layout}">
 
+<!-- CSS -->
 <th:block layout:fragment="content_css">
   <link rel="stylesheet" href="/css/pages/reserve/reserve_form.css">
   <link rel="stylesheet" href="/css/pages/reserve/reserve_time.css">
-  <!-- ✅ cdnjs FullCalendar 6.1.15 CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/main.min.css" rel="stylesheet">
+  <!-- FullCalendar 6.1.15 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
 </th:block>
 
+<!-- 본문 -->
 <th:block layout:fragment="content">
   <div class="reserve-page">
+
+    <!-- 좌측 : 단계 표시 -->
     <aside class="reserve-side">
       <h2>A/S 예약 신청</h2>
       <p>엔지니어가 방문할<br>원하는 날짜와 시간을 선택해주세요.</p>
+
       <ul class="steps">
         <li class="step step--done">
           <div class="step__marker"><i class="bi bi-check-lg"></i></div>
@@ -40,18 +45,29 @@
       </ul>
     </aside>
 
+    <!-- 우측 : 캘린더 + 시간 슬롯 -->
     <div class="reserve-main">
       <form action="/reserve/complete" method="post" id="reserve-time-form">
+
+        <!-- JS가 채워 넣을 hidden input (선택한 날짜 + 시간) -->
+        <input type="hidden" name="reserveDate" id="reserveDateInput">
+
         <div class="card card-lg time-wrap">
+
+          <!-- 캘린더 영역 -->
           <div class="calendar-area">
             <h3>방문 날짜를 선택해주세요</h3>
+            <!-- FullCalendar가 렌더링될 div -->
             <div id="calendar"></div>
           </div>
 
+          <!-- 시간 슬롯 영역 -->
           <div class="slot-area">
+
             <div class="slot-head">
               <div>
-                <h3>9월 8일 (화) <span class="badge badge-primary">오늘</span></h3>
+                <!-- JS가 날짜를 동적으로 갱신 -->
+                <h3 id="slotDateTitle">날짜를 선택해주세요</h3>
                 <p>기사님이 방문하실 정확한 시간을 선택해주세요.</p>
               </div>
               <div class="slot-legend">
@@ -60,18 +76,12 @@
               </div>
             </div>
 
-            <div class="slot-grid">
-              <!-- 시간 슬롯들 (생략) -->
-              <div class="slot slot--disabled">09:00</div>
-              <div class="slot slot--disabled">09:30</div>
-              <label class="slot-label">
-                <input type="radio" name="time" value="10:00" class="slot-input" checked>
-                <div class="slot slot--selected">10:00</div>
-              </label>
-              <!-- ... 나머지 슬롯 ... -->
-            </div>
+            <!-- JS가 이 안에 슬롯을 동적으로 생성 -->
+            <div class="slot-grid" id="slotGrid"></div>
+
             <p id="timeP" class="valigate-p invalid"></p>
 
+            <!-- 하단 버튼 -->
             <div class="form-footer">
               <a href="/reserve/form" class="btn btn-ghost btn-md">
                 <i class="bi bi-arrow-left"></i> 이전 단계
@@ -80,6 +90,7 @@
                 예약 확정하기 <i class="bi bi-check-lg"></i>
               </button>
             </div>
+
           </div>
         </div>
       </form>
@@ -87,9 +98,11 @@
   </div>
 </th:block>
 
+<!-- JavaScript -->
 <th:block layout:fragment="content_js">
-  <!-- ✅ cdnjs FullCalendar 6.1.15 JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.15/main.min.js"></script>
+  <!-- FullCalendar jS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <!-- 커스텀 JS -->
   <script src="/js/pages/reserve/reserve_time.js"></script>
 </th:block>
 </html>
