@@ -7,7 +7,7 @@
 }
 
 .reserve-side {
-  width: 280px;
+  width: 230px;
   flex-shrink: 0;
   position: sticky;
   top: 120px;
