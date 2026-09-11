@@ -3,6 +3,7 @@ package com.commit.project1.reserve.dto;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,15 +19,15 @@ public class ReserveDTO {
   private String visitAddr;            // 방문 주소
   private String visitAddrDetail;      // 상세 방문 주소
 
-
-  // @DateTimeFormat: 프론트(JS)에서 넘어오는 문자열을 LocalDateTime으로 변환
-  // 형식: "yyyy-MM-dd HH:mm:ss" (예: 2026-09-10 10:00:00)
-  // JS가 보내는 형식과 반드시 일치해야 함 (불일치 시 에러 발생)
-  // 관련 파일: reserve_time.js, reserve_time.html
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime reserveDate;   // 희망 방문 일시 (LocalDateTime)
-  private LocalDateTime registDate;    // 등록 일시 (DB 자동 입력, 조회용)
-
-
+  // 방문 날짜 (날짜만) — 시각은 SLOT_NO로 별도 관리
+  // @DateTimeFormat: JS가 보내는 "yyyy-MM-dd" 문자열을 LocalDate로 변환
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate reserveDate;    // 방문 일시
+  private LocalDateTime registDate; // 등록 일시 (DB 자동 입력)
+  // 시간 슬롯 번호 (TIME_SLOT.SLOT_NO 참조)
+  private Long slotNo;         // 슬롯 번호
+  private String slotStart;    // 시작 시간
+  private String slotEnd;      // 종료 시간
+  private String slotLabel;    // 화면 표시용 라벨
 
 }

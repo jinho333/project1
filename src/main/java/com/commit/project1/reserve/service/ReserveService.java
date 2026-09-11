@@ -1,6 +1,7 @@
 package com.commit.project1.reserve.service;
 
 import com.commit.project1.reserve.dto.ReserveDTO;
+import com.commit.project1.reserve.dto.TimeSlotDTO;
 import com.commit.project1.reserve.mapper.ReserveMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class ReserveService {
 
   // 예약 등록
   @Transactional
-  public int saveReserve(ReserveDTO dto) {
-    return reserveMapper.insertReserve(dto);
+  public void saveReserve(ReserveDTO dto) {
+    reserveMapper.insertReserve(dto);
   }
 
   // 회원 ID로 예약 목록 조회 (최신순)
@@ -39,10 +40,12 @@ public class ReserveService {
   public int updateReserveStatus(ReserveDTO dto) {
     return reserveMapper.updateReserveStatus(dto);
   }
+  public List<TimeSlotDTO> getAllTimeSlots() {
+    return reserveMapper.selectAllTimeSlots();
+  }
 
-  // 특정 날짜에 예약된 시간 목록 조회
-  public List<String> getReservedTimesByDate(String date) {
-    return reserveMapper.selectReservedTimesByDate(date);
+  public List<Long> getReservedSlotNosByDate(String date) {
+    return reserveMapper.selectReservedSlotNosByDate(date);
   }
 
 

@@ -4,12 +4,16 @@
 
 .time-wrap {
   display: flex;
-  gap: 48px;
+  gap: 32px;              /* 달력 공간 확보를 위해 48 → 32 */
   padding: 40px;
 }
 
+/* =========================================================
+   캘린더 영역
+   ========================================================= */
+
 .calendar-area {
-  width: 420px;
+  width: 560px;           /* 420 → 560 (달력 확대) */
   flex-shrink: 0;
 }
 
@@ -19,16 +23,20 @@
   margin-bottom: 24px;
 }
 
+/* =========================================================
+   슬롯 영역
+   ========================================================= */
+
 .slot-area {
   flex: 1;
+  max-width: 400px;       /* 슬롯 영역 최대 너비 제한 */
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-
 /* =========================================================
-   슬롯 헤더
+   슬롯 헤더 (선택한 날짜 제목)
    ========================================================= */
 
 .slot-head {
@@ -56,31 +64,33 @@
   font-size: 1rem;
 }
 
-
 /* =========================================================
    슬롯 그리드
    ========================================================= */
 
 .slot-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  grid-template-columns: 1fr;
+  gap: 10px;
   margin-bottom: auto;
 }
 
+/* 슬롯 기본 스타일 */
 .slot {
   position: relative;
-  padding: 10px 6px;
-  font-size: 0.9rem;
+  padding: 16px 20px;
+  font-size: 1rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background-color: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
-  transition: background-color 0.18s ease,
-              color 0.18s ease,
-              border-color 0.18s ease,
-              box-shadow 0.18s ease;
+  text-align: center;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .slot-label {
@@ -88,10 +98,9 @@
   cursor: pointer;
 }
 
+/* 라디오 버튼은 화면에서 숨김 (checked 상태는 유지) */
 .slot-input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .slot:hover {
@@ -99,14 +108,13 @@
   border-color: var(--color-border);
 }
 
-
 /* =========================================================
    선택된 슬롯 강조
    ========================================================= */
 
 .slot-input:checked + .slot {
   background-color: var(--color-primary);
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 700;
   border-color: var(--color-primary);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
@@ -114,49 +122,17 @@
 
 .slot-input:checked + .slot:hover {
   background-color: var(--color-primary-hover);
-  color: #FFFFFF;
+  color: #ffffff;
   border-color: var(--color-primary-hover);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
 }
 
-
 /* =========================================================
-   마감 임박 슬롯
-   ========================================================= */
-
-.slot--closing {
-  position: relative;
-  border: 1px solid var(--color-accent-orange);
-  color: var(--color-accent-orange);
-  font-weight: 700;
-  background-color: var(--color-accent-orange-bg);
-  animation: pulse-border 2s infinite;
-}
-
-.closing-tag {
-  position: absolute;
-  top: -10px;
-  right: -4px;
-  background: var(--color-accent-orange);
-  color: #FFF;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 3px 6px;
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xs);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 2;
-}
-
-
-/* =========================================================
-   예약 불가 슬롯
+   예약 불가 슬롯 (마감)
    ========================================================= */
 
 .slot--disabled {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
   color: var(--color-text-subtle);
   border: 1px solid transparent;
   text-decoration: line-through;
@@ -167,26 +143,57 @@
 }
 
 .slot--disabled:hover {
-  background-color: #F3F4F6;
+  background-color: #f3f4f6;
   border-color: transparent;
   color: var(--color-text-subtle);
   box-shadow: none;
 }
 
-
 /* =========================================================
    하단 버튼 영역
+   - 두 버튼(이전 단계 / 예약 확정하기)을 같은 크기로 통일
+   - hover 반응도 동일하게 통일
    ========================================================= */
 
 .slot-area .form-footer {
   margin-top: 40px;
   padding-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
+/* 두 버튼이 정확히 50:50 폭을 갖도록 균등 분배 */
+.slot-area .form-footer .btn {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  justify-content: center;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+/* 아이콘 크기 살짝 축소 */
+.slot-area .form-footer .btn i {
+  font-size: 14px;
+}
+
+/* 두 버튼 모두 hover 시 동일하게 위로 살짝 들림 */
+.slot-area .form-footer .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
 
 /* =========================================================
-   FullCalendar 상단 툴바 버튼 크기 조정
-   - 로
+   FullCalendar 상단 툴바 ([<] 제목 [>])
+   - 제목 양옆에 원형 화살표 버튼 배치
    ========================================================= */
 
 .fc .fc-button {
@@ -194,7 +201,29 @@
   font-size: 0.85rem;
 }
 
-.fc .fc-today-button {
-  padding: 4px 10px;
-  font-size: 0.8rem;
+/* prev/next 화살표 버튼 다듬기 */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-pill);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-base);
+}
+
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  border-color: var(--color-primary-soft);
+}
+
+.fc .fc-icon {
+  font-size: 1rem;
 }
