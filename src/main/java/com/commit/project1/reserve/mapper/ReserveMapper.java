@@ -26,7 +26,7 @@ public interface ReserveMapper {
   List<String> selectReservedTimesByDate(String date);
 
   //로그인한 회원의 주소를 조회
-  MemberDTO selectMemAddr(String memId);
+  MemberDTO selectMember(String memId);
 
 
 

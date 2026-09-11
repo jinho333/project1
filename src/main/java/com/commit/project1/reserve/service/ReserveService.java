@@ -49,8 +49,8 @@ public class ReserveService {
   }
 
   //로그인한 회원 주소 조회
-  public MemberDTO selectMemAddr(String memId){
-    return reserveMapper.selectMemAddr(memId);
+  public MemberDTO selectMember(String memId){
+    return reserveMapper.selectMember(memId);
   }
 
 }

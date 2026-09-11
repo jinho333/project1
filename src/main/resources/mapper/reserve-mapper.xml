@@ -102,7 +102,7 @@
   </select>
 
   <!--로그인 회원 기준 주소 조회-->
-  <select id="selectMemAddr" resultMap="com.commit.project1.member.mapper.MemberMapper.member">
+  <select id="selectMember" resultMap="com.commit.project1.member.mapper.MemberMapper.member">
     SELECT
       MEM_ID
       , MEM_NAME

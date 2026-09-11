@@ -29,7 +29,7 @@ public class ReserveController {
    MemberDTO member = (MemberDTO) session.getAttribute("loginInfo");
    if (member != null){
      String memId = member.getMemId();
-     model.addAttribute("memberAddr", reserveService.selectMemAddr(memId));
+     model.addAttribute("member", reserveService.selectMember(memId));
    }
 
     return "pages/reserve/reserve_form";

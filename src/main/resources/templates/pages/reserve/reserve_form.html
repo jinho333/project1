@@ -124,11 +124,11 @@
                     <span class="zip">06234</span>
                   </div>
                   <div class="addr-box-div">
-                    <input type="text" class="addr-main" id="newAddr" name="visitAddr" th:value="${memberAddr.addr}">
-                    <input type="text" class="addr-sub" id="newAddrDetail" name="visitAddrDetail" th:value="${memberAddr.addrDetail}">
+                    <input type="text" class="addr-main" id="newAddr" name="visitAddr" th:value="${member.addr}">
+                    <input type="text" class="addr-sub" id="newAddrDetail" name="visitAddrDetail" th:value="${member.addrDetail}">
                   </div>
                 </div>
-                <input type="hidden" name="memId" th:value="${memberAddr.memId}">
+                <input type="hidden" name="memId" th:value="${member.memId}">
               </div>
               <button type="button" class="btn btn-secondary btn-md" onclick="searchPostCode()">주소 변경</button>
             </div>
