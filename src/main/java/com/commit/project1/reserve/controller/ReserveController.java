@@ -4,6 +4,7 @@ import com.commit.project1.reserve.dto.ReserveDTO;
 import com.commit.project1.reserve.service.ReserveService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReserveController {
   private final ReserveService reserveService;
+  @Value("${file.upload.dir}")
+  private String uploadPath;  //첨부파일 업로드 경로 담을 문자열 변수
 
   //예약 정보 입력 관련 컨트롤러
   @GetMapping("/form")
