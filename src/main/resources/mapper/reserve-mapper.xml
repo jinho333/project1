@@ -111,6 +111,7 @@
       , ADDR_DETAIL
     FROM MEMBER
     WHERE MEM_ID = #{memId}
+  </select>
   <!--모든 예약 내역 조회 -->
   <select id="selectReserves" resultMap="ReserveResultMap">
     SELECT RESERVE_NO
