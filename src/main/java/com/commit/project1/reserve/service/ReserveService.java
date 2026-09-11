@@ -1,5 +1,7 @@
 package com.commit.project1.reserve.service;
 
+import com.commit.project1.member.dto.MemberDTO;
+import com.commit.project1.member.mapper.MemberMapper;
 import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
 import com.commit.project1.reserve.mapper.ReserveMapper;
@@ -46,9 +48,9 @@ public class ReserveService {
     return reserveMapper.selectReservedTimesByDate(date);
   }
 
-  //카테고리 목록 조히
-//  public List<CategoryDTO> categoryList(){
-//    return reserveMapper.categoryList();
-//  }
+  //로그인한 회원 주소 조회
+  public MemberDTO selectMemAddr(String memId){
+    return reserveMapper.selectMemAddr(memId);
+  }
 
 }

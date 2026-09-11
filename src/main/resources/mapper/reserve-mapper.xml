@@ -101,8 +101,14 @@
     AND RESERVE_STATUS != 'C'
   </select>
 
-
-
+  <!--로그인 회원 기준 주소 조회-->
+  <select id="selectMemAddr" resultType="com.commit.project1.member.dto.MemberDTO">
+    SELECT
+    ADDR
+    , ADDR_DETAIL AS addrDetail
+    FROM MEMBER
+    WHERE MEM_ID = #{memId}
+  </select>
 
 </mapper>
 

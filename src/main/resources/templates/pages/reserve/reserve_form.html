@@ -123,11 +123,11 @@
                     <span class="badge badge-gray">기본 주소</span>
                     <span class="zip">06234</span>
                   </div>
-                  <p class="addr-main">서울 강남구 테헤란로 123</p>
-                  <p class="addr-sub">강남아파트 101동 202호</p>
+                  <p class="addr-main" th:text="${memberAddr.addr}" id="newAddr"></p>
+                  <p class="addr-sub" th:text="${memberAddr.addrDetail}" id="newAddrDetail"></p>
                 </div>
               </div>
-              <button type="button" class="btn btn-secondary btn-md">주소 변경</button>
+              <button type="button" class="btn btn-secondary btn-md" onclick="searchPostCode()">주소 변경</button>
             </div>
           </section>
 
@@ -148,5 +148,6 @@
 <!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
 <th:block layout:fragment="content_js">
   <script src="/js/pages/reserve/reserve_form.js"></script>
+  <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </th:block>
 </html>

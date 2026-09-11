@@ -1,5 +1,6 @@
 package com.commit.project1.reserve.mapper;
 
+import com.commit.project1.member.dto.MemberDTO;
 import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -24,9 +25,8 @@ public interface ReserveMapper {
   // 특정 날짜에 예약된 시간 목록 조회
   List<String> selectReservedTimesByDate(String date);
 
-  //카테고리 목록 조회
-  //List<CategoryDTO> categoryList();
-
+  //로그인한 회원의 주소를 조회
+  MemberDTO selectMemAddr(String memId);
 
 
 

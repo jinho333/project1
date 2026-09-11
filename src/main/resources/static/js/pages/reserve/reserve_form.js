@@ -31,3 +31,20 @@ const goReserveStep2 = () => {
     document.querySelector('#reserve-form').submit();
   }
 }
+
+//주소변경 버튼 클릭 시 변경 주소api
+const searchPostCode = () => {
+   new kakao.Postcode({
+    oncomplete: function(data) {
+     document.querySelector('#newAddr').textContent = data.roadAddress;
+     //상세주소 입력 태그로 변경?이 필요하다
+     const addr_tag = document.querySelector('#newAddr');
+     document.querySelector('#newAddrDetail').innerHTML='';
+     let str = ''
+     str = `
+     <input type="text" name="addrDetail" id="newAddrDetail">
+     `
+      addr_tag.insertAdjacentHTML("afterend", str);
+    }
+  }).open();
+}
