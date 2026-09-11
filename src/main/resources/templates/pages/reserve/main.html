@@ -36,30 +36,40 @@
 
 
       <!-- 카드2 : 진행 중인 예약 -->
-      <div class="card card-lg reserve-card">
-        <span class="side-line"></span>
-        <div class="reserve-head">
-          <p class="label">진행 중인 예약</p>
-          <span class="time-chip"><i class="bi bi-clock"></i> 오늘 15:30 예정</span>
-        </div>
-        <div class="reserve-body">
-          <div class="product-icon"><i class="bi bi-snow2"></i></div>
-          <div>
-            <span class="badge badge-orange animate-pulse">이동 중</span>
-            <p class="product-name">벽걸이 에어컨 수리</p>
-          </div>
-        </div>
-        <div class="driver-box">
-          <div class="driver-info">
-            <img src="https://placehold.co/100x100/e2e8f0/64748b?text=D">
+      <th:block th:if="${session.loginInfo != null}">
+        <div class="card card-lg reserve-card">
+          <span class="side-line"></span>
+          <div class="reserve-head">
             <div>
-              <p class="name">김철수 기사님</p>
-              <p class="desc">도착까지 약 15분 남음</p>
+              <p class="label">진행 중인 예약</p>
+              <th:block th:if="${#lists.size(reserves) >= 2}">
+                <p><a href="/reserve/list" class="label">+ 다른 예약 [[${#lists.size(reserves) - 1}]]건 더 보기</a></p>
+              </th:block>
+            </div>
+            
+            <span class="time-chip"><i class="bi bi-clock"></i> [[${#temporals.format(reserves[0].reserveDate, 'yyyy-MM-dd HH:mm')}]]</span>
+          </div>
+          <div class="reserve-body">
+            <div class="product-icon">
+              <i class="bi bi-snow2"></i>
+            </div>
+            <div>
+              <span class="badge badge-orange animate-pulse">이동 중</span>
+              <p class="product-name" th:text="${reserves[0].categoryNo}"></p>
             </div>
           </div>
-          <button type="button" class="btn-icon"><i class="bi bi-telephone-fill"></i></button>
+          <div class="driver-box">
+            <div class="driver-info">
+              <img src="https://placehold.co/100x100/e2e8f0/64748b?text=D">
+              <div>
+                <p class="name">김철수 기사님</p>
+                <p class="desc">도착까지 약 15분 남음</p>
+              </div>
+            </div>
+            <button type="button" class="btn-icon"><i class="bi bi-telephone-fill"></i></button>
+          </div>
         </div>
-      </div>
+      </th:block>
     </div>
   </div>
 </th:block>

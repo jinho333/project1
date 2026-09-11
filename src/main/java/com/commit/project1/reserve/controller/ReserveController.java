@@ -1,11 +1,14 @@
 package com.commit.project1.reserve.controller;
 
 import com.commit.project1.member.dto.MemberDTO;
+import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
 import com.commit.project1.reserve.dto.TimeSlotDTO;
 import com.commit.project1.reserve.service.ReserveService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +24,20 @@ import java.util.Map;
 public class ReserveController {
 
   private final ReserveService reserveService;
+  @Value("${file.upload.dir}")
+  private String uploadPath;  //첨부파일 업로드 경로 담을 문자열 변수
 
   // 폼 페이지
   @GetMapping("/form")
-  public String reserveForm() {
+  public String reserveForm(HttpSession session, Model model){
+
+    //로그인한 회원 주소 (세션에서 아이디를 찾자!)
+   MemberDTO member = (MemberDTO) session.getAttribute("loginInfo");
+   if (member != null){
+     String memId = member.getMemId();
+     model.addAttribute("member", reserveService.selectMember(memId));
+   }
+
     return "pages/reserve/reserve_form";
   }
 
@@ -70,6 +83,9 @@ public class ReserveController {
     model.addAttribute("visitAddr", "울산광역시 남구 삼산로 123");
     model.addAttribute("visitAddrDetail", "101동 202호");
 
+  @PostMapping("/form-submit")
+  public String reserveTime(ReserveDTO reserveDTO){
+    System.out.println(reserveDTO);
     return "pages/reserve/reserve_time";
   }
 
@@ -169,6 +185,15 @@ public class ReserveController {
     if (login != null) {
       memId = login.getMemId();
     }
+  public String reserveList(HttpServletRequest request, Model model){
+    HttpSession session = request.getSession();
+    MemberDTO loginInfo = (MemberDTO) session.getAttribute("loginInfo");
+    if( loginInfo != null ) {
+      model.addAttribute("reserves", reserveService.getReservesByMemId(loginInfo.getMemId()));
+    }
+
+    return "pages/reserve/reserve_list";
+  }
 
     // 2) 회원의 예약 목록 조회 (최신순)
     List<ReserveDTO> reserves = reserveService.getReservesByMemId(memId);

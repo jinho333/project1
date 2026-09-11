@@ -34,6 +34,14 @@
 
   <!-- 전체 슬롯 조회 -->
   <select id="selectAllTimeSlots" resultMap="TimeSlotResultMap">
+  <resultMap id="category" type="com.commit.project1.reserve.dto.CategoryDTO">
+    <id column="CATEGORY_NO" property="categoryNo"/>
+    <result column="CATEGORY_NAME" property="categoryName"/>
+    <result column="PRODUCT_TYPE" property="productType"/>
+  </resultMap>
+
+  <!-- 특정 회원의 예약 목록 조회 -->
+  <select id="selectReserveByMemId" resultMap="ReserveResultMap">
     SELECT
     SLOT_NO
     , SLOT_START
@@ -135,4 +143,47 @@
     WHERE RESERVE_NO = #{reserveNo}
   </update>
 
+  <!-- 특정 날짜에 이미 예약된 시간 목록 조회 -->
+  <!--  RESERVE_STATUS != 'C' : 취소된 예약은 제외 -->
+  <select id="selectReservedTimesByDate" resultType="string">
+    SELECT DATE_FORMAT(RESERVE_DATE, '%H:%i')
+    FROM RESERVE
+    WHERE DATE(RESERVE_DATE) = #{date}
+    AND RESERVE_STATUS != 'C'
+  </select>
+
+  <!--로그인 회원 기준 주소 조회-->
+  <select id="selectMember" resultMap="com.commit.project1.member.mapper.MemberMapper.member">
+    SELECT
+      MEM_ID
+      , MEM_NAME
+      , TEL
+      , ADDR
+      , ADDR_DETAIL
+    FROM MEMBER
+    WHERE MEM_ID = #{memId}
+  </select>
+  <!--모든 예약 내역 조회 -->
+  <select id="selectReserves" resultMap="ReserveResultMap">
+    SELECT RESERVE_NO
+    ,MODEL_NAME
+    ,MEM_ID
+    ,TECHNICIAN_ID
+    ,CATEGORY_NO
+    ,RESERVE_DATE
+    ,REGIST_DATE
+    ,RESERVE_STATUS
+    ,VISIT_ADDR
+    FROM RESERVE
+  </select>
+
+  <!--카테고리별 예약 내역 건수 조회-->
+  <select id="countReserveByCate" resultType="Long">
+    SELECT COUNT(CATEGORY_NO)
+    FROM RESERVE
+    GROUP BY CATEGORY_NO
+    ORDER BY CATEGORY_NO DESC
+  </select>
+
 </mapper>
+

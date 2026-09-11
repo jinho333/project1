@@ -47,40 +47,38 @@
     <div class="reserve-main">
       <form action="/reserve/form-submit" method="post" id="reserve-form">
         <div class="card card-lg">
-
           <!-- Q1. 기기 선택 -->
           <section class="form-section">
             <h3><span class="q-mark">Q.</span> 어떤 기기에 문제가 있나요?</h3>
-
+            
             <div class="cate-tab">
-              <button type="button" class="tab active">냉방 기기</button>
-              <button type="button" class="tab">난방 기기</button>
+              <button type="button" class="tab active" name="productType" value="냉방">냉방 기기</button>
+              <button type="button" class="tab" name="productType"  value="냉방">난방 기기</button>
             </div>
-
             <div class="product-grid">
               <label class="radio-card">
-                <input type="radio" name="product" value="AC" class="radio-card__input" checked>
+                <input type="radio" name="categoryNo" value="1" class="radio-card__input" checked>
                 <div class="radio-card__body product-card">
                   <i class="bi bi-snow2"></i>
                   <span>에어컨</span>
                 </div>
               </label>
               <label class="radio-card">
-                <input type="radio" name="product" value="OUT" class="radio-card__input">
+                <input type="radio" name="categoryNo" value="2" class="radio-card__input">
                 <div class="radio-card__body product-card">
                   <i class="bi bi-fan"></i>
                   <span>실외기</span>
                 </div>
               </label>
               <label class="radio-card">
-                <input type="radio" name="product" value="DEHUM" class="radio-card__input">
+                <input type="radio" name="categoryNo" value="4" class="radio-card__input">
                 <div class="radio-card__body product-card">
                   <i class="bi bi-wind"></i>
-                  <span>제습기</span>
+                  <span>제습</span>
                 </div>
               </label>
               <label class="radio-card">
-                <input type="radio" name="product" value="ETC" class="radio-card__input">
+                <input type="radio" name="categoryNo" value="5" class="radio-card__input">
                 <div class="radio-card__body product-card">
                   <i class="bi bi-three-dots"></i>
                   <span>기타 기기</span>
@@ -89,7 +87,6 @@
             </div>
             <p id="productP" class="valigate-p invalid"></p>
           </section>
-
           <hr class="divider">
 
           <!-- Q2. 증상 -->
@@ -127,11 +124,14 @@
                     <span class="badge badge-gray">기본 주소</span>
                     <span class="zip">06234</span>
                   </div>
-                  <p class="addr-main">서울 강남구 테헤란로 123</p>
-                  <p class="addr-sub">강남아파트 101동 202호</p>
+                  <div class="addr-box-div">
+                    <input type="text" class="addr-main" id="newAddr" name="visitAddr" th:value="${member.addr}">
+                    <input type="text" class="addr-sub" id="newAddrDetail" name="visitAddrDetail" th:value="${member.addrDetail}">
+                  </div>
                 </div>
+                <input type="hidden" name="memId" th:value="${member.memId}">
               </div>
-              <button type="button" class="btn btn-secondary btn-md">주소 변경</button>
+              <button type="button" class="btn btn-secondary btn-md" onclick="searchPostCode()">주소 변경</button>
             </div>
           </section>
 
@@ -152,5 +152,6 @@
 <!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
 <th:block layout:fragment="content_js">
   <script src="/js/pages/reserve/reserve_form.js"></script>
+  <script src="//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </th:block>
 </html>

@@ -1,5 +1,8 @@
 package com.commit.project1.reserve.service;
 
+import com.commit.project1.member.dto.MemberDTO;
+import com.commit.project1.member.mapper.MemberMapper;
+import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
 import com.commit.project1.reserve.dto.TimeSlotDTO;
 import com.commit.project1.reserve.mapper.ReserveMapper;
@@ -46,6 +49,15 @@ public class ReserveService {
 
   public List<Long> getReservedSlotNosByDate(String date) {
     return reserveMapper.selectReservedSlotNosByDate(date);
+  }
+
+  //로그인한 회원 주소 조회
+  public MemberDTO selectMember(String memId){
+    return reserveMapper.selectMember(memId);
+  }
+  //모든 예약 정보 조회
+  public List<ReserveDTO> selectReserves(){
+    return reserveMapper.selectReserves();
   }
 
 

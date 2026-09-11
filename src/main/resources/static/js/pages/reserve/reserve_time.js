@@ -1,18 +1,16 @@
 // reserve_time.js
+//콜백(초기화 함수)
+document.addEventListener("DOMContentLoaded", function () {
+  const calendarEl = document.getElementById("calendar");  // calendar 요소 담기
 
-document.addEventListener("DOMContentLoaded", () => {
-  const calendarEl = document.getElementById("calendar");
-
-  if (!calendarEl) {
-    console.error("#calendar 요소를 찾을 수 없습니다.");
+  if (!calendarEl) { // calendar 요소를 참조 못했다면
+    console.error("❌ #calendar 요소를 찾을 수 없습니다.");
     return;
   }
 
-  // 내일 날짜 계산 (당일 예약 차단 정책)
-  // - 오늘 날짜는 선택 불가 → 최소 내일부터 예약 가능
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowStr = formatDate(tomorrow);
+  // 오늘 날짜를 기본 선택값으로 설정
+  const today = new Date();
+  let selectedDate = formatDate(today);   // 2026-09-10" 형식 문자열로 저장
 
   // 기본 선택값은 내일
   let selectedDate = tomorrowStr;
@@ -114,11 +112,11 @@ const updateSlotHeader = (dateStr) => {
   const headerEl = document.getElementById("slotDateTitle");
   if (!headerEl) return;
 
-  const date = new Date(dateStr);
-  const month = date.getMonth() + 1;
+  const date = new Date(dateStr); //문자열을 다시 date 객체로 변환
+  const month = date.getMonth() + 1;  
   const day = date.getDate();
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
-  const weekday = weekdays[date.getDay()];
+  const weekday = weekdays[date.getDay()]; 
 
   headerEl.innerHTML = `${month}월 ${day}일 (${weekday})`;
 };
