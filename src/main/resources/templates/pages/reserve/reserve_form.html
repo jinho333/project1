@@ -123,9 +123,12 @@
                     <span class="badge badge-gray">기본 주소</span>
                     <span class="zip">06234</span>
                   </div>
-                  <p class="addr-main" th:text="${memberAddr.addr}" id="newAddr"></p>
-                  <p class="addr-sub" th:text="${memberAddr.addrDetail}" id="newAddrDetail"></p>
+                  <div class="addr-box-div">
+                    <input type="text" class="addr-main" id="newAddr" name="visitAddr" th:value="${memberAddr.addr}">
+                    <input type="text" class="addr-sub" id="newAddrDetail" name="visitAddrDetail" th:value="${memberAddr.addrDetail}">
+                  </div>
                 </div>
+                <input type="hidden" name="memId" th:value="${memberAddr.memId}">
               </div>
               <button type="button" class="btn btn-secondary btn-md" onclick="searchPostCode()">주소 변경</button>
             </div>

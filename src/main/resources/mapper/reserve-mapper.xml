@@ -102,10 +102,13 @@
   </select>
 
   <!--로그인 회원 기준 주소 조회-->
-  <select id="selectMemAddr" resultType="com.commit.project1.member.dto.MemberDTO">
+  <select id="selectMemAddr" resultMap="com.commit.project1.member.mapper.MemberMapper.member">
     SELECT
-    ADDR
-    , ADDR_DETAIL AS addrDetail
+      MEM_ID
+      , MEM_NAME
+      , TEL
+      , ADDR
+      , ADDR_DETAIL
     FROM MEMBER
     WHERE MEM_ID = #{memId}
   </select>

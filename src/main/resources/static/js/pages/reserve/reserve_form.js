@@ -1,6 +1,6 @@
 //예약 1단계 유효성 검사
 const reserveFormValigate = () => {
-  const product = document.querySelector('input[name="product"]:checked');
+  const product = document.querySelector('input[name="categoryNo"]:checked');
   const symptom = document.querySelector('textarea[name="symptom"]').value;
 
   const symptom_regex = /^[a-zA-Z0-9가-힣\s\p{P}]{5,500}$/u;
@@ -36,15 +36,17 @@ const goReserveStep2 = () => {
 const searchPostCode = () => {
    new kakao.Postcode({
     oncomplete: function(data) {
-     document.querySelector('#newAddr').textContent = data.roadAddress;
-     //상세주소 입력 태그로 변경?이 필요하다
-     const addr_tag = document.querySelector('#newAddr');
-     document.querySelector('#newAddrDetail').innerHTML='';
-     let str = ''
-     str = `
-     <input type="text" name="addrDetail" id="newAddrDetail">
-     `
-      addr_tag.insertAdjacentHTML("afterend", str);
+     document.querySelector('#newAddr').value = data.roadAddress;
+    
+      const addrDetailInput = document.querySelector('#newAddrDetail');
+      addrDetailInput.value = '상세주소를 입력하세요.';
+      
+      addrDetailInput.addEventListener('focus', function () {
+        this.value = '';
+      }, { once: true });
     }
   }).open();
 }
+
+//<p class="addr-main" th:text="${memberAddr.addr}" id="newAddr" name="addr"></p>
+//<p class="addr-sub" th:text="${memberAddr.addrDetail}" id="newAddrDetail"></p>

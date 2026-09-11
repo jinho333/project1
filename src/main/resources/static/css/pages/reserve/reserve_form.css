@@ -118,6 +118,13 @@
 }
 
 .addr-info { display: flex; gap: 16px; align-items: flex-start; }
+.addr-box-div{ display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+
+.addr-box-div > input{
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
 
 .addr-icon {
   width: 40px;

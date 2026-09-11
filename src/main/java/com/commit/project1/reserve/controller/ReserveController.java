@@ -36,8 +36,9 @@ public class ReserveController {
   }
 
   // 예약 시간 선택 페이지
-  @GetMapping("/time")
-  public String reserveTime(){
+  @PostMapping("/form-submit")
+  public String reserveTime(ReserveDTO reserveDTO){
+    System.out.println(reserveDTO);
     return "pages/reserve/reserve_time";
   }
 

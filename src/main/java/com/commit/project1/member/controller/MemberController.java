@@ -1,6 +1,8 @@
 package com.commit.project1.member.controller;
 
 import com.commit.project1.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,5 +20,4 @@ public class MemberController {
   public String loginForm(){
     return "pages/member/login";
   }
-
 }
