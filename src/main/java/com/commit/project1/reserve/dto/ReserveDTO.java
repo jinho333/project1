@@ -34,4 +34,19 @@ public class ReserveDTO {
   private String categoryName;   // 카테고리명 (예: '에어컨')
   private String productType;    // 제품 유형 ('냉방' / '난방')
 
+
+   // 예약 상태 코드를 진행 단계(0~4)로 변환
+   // - 진행바 표시용 (Thymeleaf에서 ${r.statusStep}로 접근)
+   // - 0: 취소 / 1: 접수 / 2: 배정 / 3: 방문중 / 4: 완료
+
+  public int getStatusStep() {
+    return switch (this.reserveStatus) {
+      case "0" -> 1;
+      case "1" -> 2;
+      case "2" -> 3;
+      case "9" -> 4;
+      default  -> 0;  // 'C' 취소
+    };
+  }
+
 }

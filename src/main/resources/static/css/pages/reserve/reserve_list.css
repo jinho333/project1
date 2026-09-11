@@ -271,3 +271,153 @@
   font-size: 1.05rem;
   margin-bottom: 24px;
 }
+
+/* =========================================================
+   카드 기본 (진행바를 위해 세로 배치)
+   ========================================================= */
+.reserve-item {
+  flex-direction: column;   /* 상단 + 하단 분리 */
+  align-items: stretch;
+  padding: 32px !important;
+}
+
+.reserve-item__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  width: 100%;
+}
+
+/* =========================================================
+   하단 공통 (진행바 / 완료 / 취소)
+   ========================================================= */
+.reserve-bottom {
+  width: 100%;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-light);
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* =========================================================
+   진행바 (접수 → 배정 → 방문 → 완료)
+   ========================================================= */
+.progress-track {
+  display: flex;
+  align-items: flex-start;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.progress-step .dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  transition: var(--transition-base);
+}
+
+.progress-step .dot i { font-size: 14px; }
+
+.progress-step .label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+}
+
+/* 완료된 단계 (파란색) */
+.progress-step.is-done .dot {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+.progress-step.is-done .label {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+/* 진행 중인 단계 (오렌지 + 펄스) */
+.progress-step.is-active .dot {
+  background: var(--color-accent-orange);
+  border-color: var(--color-accent-orange);
+  box-shadow: 0 0 0 4px var(--color-accent-orange-bg);
+  animation: pulse-border 2s infinite;
+}
+.progress-step.is-active .label {
+  color: var(--color-accent-orange);
+  font-weight: 700;
+}
+
+/* 아직 오지 않은 단계 (회색) */
+.progress-step.is-pending .dot {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+/* 단계 사이 연결선 */
+.progress-line {
+  flex: 1;
+  height: 2px;
+  margin-top: 12px;
+  margin-left: -6px;
+  margin-right: -6px;
+  background: var(--color-border-light);
+  transition: var(--transition-base);
+}
+.progress-line.is-done {
+  background: var(--color-primary);
+}
+
+/* =========================================================
+   완료 탭: 완료일 + 리뷰 버튼
+   ========================================================= */
+.reserve-bottom.done {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.done-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-accent-green);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.done-info i { font-size: 1.1rem; }
+
+/* =========================================================
+   취소 탭: 취소 안내 + 재예약 버튼
+   ========================================================= */
+.reserve-bottom.cancelled {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.cancel-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.cancel-info i { color: var(--color-text-subtle); font-size: 1.1rem; }

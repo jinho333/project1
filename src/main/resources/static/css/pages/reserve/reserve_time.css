@@ -4,7 +4,7 @@
 
 .time-wrap {
   display: flex;
-  gap: 32px;              /* 달력 공간 확보를 위해 48 → 32 */
+  gap: 32px;        
   padding: 40px;
 }
 
@@ -13,7 +13,7 @@
    ========================================================= */
 
 .calendar-area {
-  width: 560px;           /* 420 → 560 (달력 확대) */
+  width: 560px;     
   flex-shrink: 0;
 }
 

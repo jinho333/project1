@@ -16,7 +16,6 @@
         <div class="my-profile">
           <img src="https://placehold.co/100x100/e2e8f0/64748b?text=U">
           <div>
-            <!-- 로그인 정보가 있으면 실제 이름, 없으면 임시값 -->
             <h2 th:text="${session.loginInfo != null ? session.loginInfo.memName : '김고객'}">김고객</h2>
             <p th:text="${session.loginInfo != null ? session.loginInfo.memId : 'user1'}">user1</p>
           </div>
@@ -75,57 +74,137 @@
           <span th:if="${r.reserveStatus == 'C'}" class="line-gray"></span>
           <span th:if="${r.reserveStatus == '0' or r.reserveStatus == '1'}" class="line-blue"></span>
 
-          <div class="reserve-item__body">
-            <!-- 카테고리에 따라 아이콘 분기 (냉방: 눈송이 / 난방: 온도계) -->
-            <div class="product-icon-lg"
-                 th:classappend="${r.reserveStatus == '9' or r.reserveStatus == 'C'} ? ' gray' : ''">
-              <i class="bi"
-                 th:classappend="${r.productType == '난방'} ? ' bi-thermometer-high' : ' bi-snow2'"></i>
-            </div>
+          <!-- 카드 상단: 아이콘 + 정보 + 화살표 -->
+          <div class="reserve-item__main">
 
-            <div class="reserve-item__info">
-              <div class="tag-row">
-                <!-- 상태 배지 (th:switch) -->
-                <th:block th:switch="${r.reserveStatus}">
-                  <span th:case="'0'" class="badge badge-primary">
-                    <i class="bi bi-hourglass-split"></i> 예약 접수
-                  </span>
-                  <span th:case="'1'" class="badge badge-primary">
-                    <i class="bi bi-person-check"></i> 기사 배정 완료
-                  </span>
-                  <span th:case="'2'" class="badge badge-orange animate-pulse">
-                    <i class="bi bi-truck"></i> 기사 이동 중
-                  </span>
-                  <span th:case="'9'" class="badge badge-green">
-                    <i class="bi bi-check-lg"></i> 수리 완료
-                  </span>
-                  <span th:case="'C'" class="badge badge-gray">
-                    <i class="bi bi-x-lg"></i> 취소됨
-                  </span>
-                </th:block>
-
-                <!-- 방문 예정 일시 -->
-                <span class="time-chip"
-                      th:text="|${#temporals.format(r.reserveDate, 'M월 d일 (E)')} ${r.slotLabel}|">
-                  9월 12일 (금) 10:00 ~ 12:00
-                </span>
+            <div class="reserve-item__body">
+              <!-- 카테고리에 따라 아이콘 분기 -->
+              <div class="product-icon-lg"
+                   th:classappend="${r.reserveStatus == '9' or r.reserveStatus == 'C' ? 'gray' : ''}">
+                <i class="bi"
+                   th:classappend="${r.productType == '난방' ? 'bi-thermometer-high' : 'bi-snow2'}"></i>
               </div>
 
-              <h3 th:text="${r.modelName}">삼성 무풍 에어컨</h3>
-              <p class="addr">
-                <i class="bi bi-geo-alt-fill"></i>
-                <span th:text="${r.visitAddr} + ' ' + ${r.visitAddrDetail}">주소</span>
-              </p>
+              <div class="reserve-item__info">
+                <div class="tag-row">
+                  <!-- 상태 배지 -->
+                  <th:block th:switch="${r.reserveStatus}">
+                    <span th:case="'0'" class="badge badge-primary">
+                      <i class="bi bi-hourglass-split"></i> 예약 접수
+                    </span>
+                    <span th:case="'1'" class="badge badge-primary">
+                      <i class="bi bi-person-check"></i> 기사 배정 완료
+                    </span>
+                    <span th:case="'2'" class="badge badge-orange animate-pulse">
+                      <i class="bi bi-truck"></i> 기사 이동 중
+                    </span>
+                    <span th:case="'9'" class="badge badge-green">
+                      <i class="bi bi-check-lg"></i> 수리 완료
+                    </span>
+                    <span th:case="'C'" class="badge badge-gray">
+                      <i class="bi bi-x-lg"></i> 취소됨
+                    </span>
+                  </th:block>
+
+                  <!-- 방문 예정 일시 -->
+                  <span class="time-chip"
+                        th:text="|${#temporals.format(r.reserveDate, 'M월 d일 (E)')} ${r.slotLabel}|">
+                    9월 12일 (금) 10:00 ~ 12:00
+                  </span>
+                </div>
+
+                <h3 th:text="${r.modelName}">삼성 무풍 에어컨</h3>
+                <p class="addr">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span th:text="${r.categoryName} + ' · ' + ${r.visitAddr}">카테고리 · 주소</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- 우측 화살표 -->
+            <div class="reserve-item__driver only-arrow">
+              <span class="arrow-icon"><i class="bi bi-chevron-right"></i></span>
             </div>
           </div>
 
-          <!-- 우측 (기사 배정 전이면 화살표만) -->
-          <div class="reserve-item__driver only-arrow">
-            <span class="arrow-icon"><i class="bi bi-chevron-right"></i></span>
+          <!-- 하단 1) 진행 중 탭 : 진행바 -->
+          <div class="reserve-bottom progress"
+               th:if="${r.reserveStatus == '0' or r.reserveStatus == '1' or r.reserveStatus == '2'}">
+
+            <div class="progress-track">
+              <!-- 1. 접수 -->
+              <div class="progress-step"
+                   th:classappend="${r.statusStep gt 1 ? 'is-done' : 'is-active'}">
+                <span class="dot"><i class="bi bi-check-lg"></i></span>
+                <span class="label">접수</span>
+              </div>
+              <div class="progress-line"
+                   th:classappend="${r.statusStep gt 1 ? 'is-done' : 'is-pending'}"></div>
+
+              <!-- 2. 배정 -->
+              <div class="progress-step"
+                   th:classappend="${r.statusStep gt 2 ? 'is-done' : (r.statusStep == 2 ? 'is-active' : 'is-pending')}">
+                <span class="dot"><i class="bi bi-check-lg"></i></span>
+                <span class="label">배정</span>
+              </div>
+              <div class="progress-line"
+                   th:classappend="${r.statusStep gt 2 ? 'is-done' : 'is-pending'}"></div>
+
+              <!-- 3. 방문 -->
+              <div class="progress-step"
+                   th:classappend="${r.statusStep gt 3 ? 'is-done' : (r.statusStep == 3 ? 'is-active' : 'is-pending')}">
+                <span class="dot"><i class="bi bi-check-lg"></i></span>
+                <span class="label">방문</span>
+              </div>
+              <div class="progress-line"
+                   th:classappend="${r.statusStep gt 3 ? 'is-done' : 'is-pending'}"></div>
+
+              <!-- 4. 완료 (진행 중 탭에서는 항상 pending) -->
+              <div class="progress-step is-pending">
+                <span class="dot"><i class="bi bi-check-lg"></i></span>
+                <span class="label">완료</span>
+              </div>
+            </div>
+
           </div>
+
+          <!-- 하단 2) 완료 탭 ('9') : 완료일 + 리뷰 작성 버튼 -->
+          <div class="reserve-bottom done"
+               th:if="${r.reserveStatus == '9'}">
+
+            <div class="done-info">
+              <i class="bi bi-check-circle-fill"></i>
+              <span th:text="${#temporals.format(r.reserveDate, 'yyyy년 M월 d일')} + ' 완료'">
+                2026년 9월 12일 완료
+              </span>
+            </div>
+
+            <button type="button"
+                    class="btn btn-secondary btn-sm"
+                    onclick="event.stopPropagation(); location.href='/review/write';">
+              <i class="bi bi-star"></i> 리뷰 작성
+            </button>
+          </div>
+
+          <!-- 하단 3) 취소 탭 ('C') : 취소 안내 + 다시 예약 버튼 -->
+          <div class="reserve-bottom cancelled"
+               th:if="${r.reserveStatus == 'C'}">
+
+            <div class="cancel-info">
+              <i class="bi bi-x-circle"></i>
+              <span>취소된 예약입니다.</span>
+            </div>
+
+            <button type="button"
+                    class="btn btn-primary btn-sm"
+                    onclick="event.stopPropagation(); location.href='/reserve/form';">
+              <i class="bi bi-arrow-clockwise"></i> 다시 예약
+            </button>
+          </div>
+
         </div>
 
-        <!-- 탭 필터 결과 없음 안내  -->
+        <!-- 탭 필터 결과 없음 안내 (JS) -->
         <div id="tabEmpty" class="empty-state" style="display:none;">
           <i class="bi bi-inbox"></i>
           <p>이 탭에 해당하는 예약이 없습니다.</p>
