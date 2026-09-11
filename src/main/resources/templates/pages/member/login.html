@@ -20,9 +20,11 @@
       <form action="/member/login" method="post" id="login-form">
         <div class="login">
           <p>아이디</p>
-          <input type="text" class="form-control" name="memId" placeholder="아이디를 입력해주세요">
+          <input type="text" class="form-control" name="memId" placeholder="아이디를 입력해주세요"
+          onkeydown="if(event.key === 'Enter') login()">
           <p>비밀번호</p>
-          <input type="password" class="form-control" name="memPw" placeholder="비밀번호를 입력해주세요">
+          <input type="password" class="form-control" name="memPw" placeholder="비밀번호를 입력해주세요"
+          onkeydown="if(event.key === 'Enter') login()">
           <p class="valigate-p invalid"></p>
 
           <div class="auto-login">
@@ -41,7 +43,6 @@
         <span>|</span>
         <a href="#">비밀번호 찾기</a>
       </div>
-
       <div class="divider">
         <span>또는 간편 로그인</span>
       </div>
