@@ -246,3 +246,28 @@
   color: #FFF;
   border-color: var(--color-primary);
 }
+
+/* 취소된 예약 좌측 라인 */
+.line-gray {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 8px;
+  background: var(--color-border);
+}
+
+/* 빈 상태 안내 */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-muted);
+}
+.empty-state i {
+  font-size: 3rem;
+  color: var(--color-text-subtle);
+  display: block;
+  margin-bottom: 16px;
+}
+.empty-state p {
+  font-size: 1.05rem;
+  margin-bottom: 24px;
+}

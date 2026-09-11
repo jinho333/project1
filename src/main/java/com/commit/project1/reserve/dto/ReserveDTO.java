@@ -30,4 +30,8 @@ public class ReserveDTO {
   private String slotEnd;      // 종료 시간
   private String slotLabel;    // 화면 표시용 라벨
 
+  // 조회 시 JOIN으로 채워지는 필드 (INSERT 시엔 사용 안 함)
+  private String categoryName;   // 카테고리명 (예: '에어컨')
+  private String productType;    // 제품 유형 ('냉방' / '난방')
+
 }

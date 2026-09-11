@@ -159,9 +159,39 @@ public class ReserveController {
     return "pages/reserve/reserve_complete";
   }
 
-  // 예약 조회 페이지 (마이페이지)
+  // 예약 조회 페이지
   @GetMapping("/list")
-  public String reserveList() {
+  public String reserveList(HttpSession session, Model model) {
+
+    // 1) 로그인 회원 ID (임시 폴백)
+    String memId = "user1";
+    MemberDTO login = (MemberDTO) session.getAttribute("loginInfo");
+    if (login != null) {
+      memId = login.getMemId();
+    }
+
+    // 2) 회원의 예약 목록 조회 (최신순)
+    List<ReserveDTO> reserves = reserveService.getReservesByMemId(memId);
+
+    // 3) 탭별 카운트 계산
+    long activeCount = reserves.stream()
+            .filter(r -> "0".equals(r.getReserveStatus())
+                    || "1".equals(r.getReserveStatus())
+                    || "2".equals(r.getReserveStatus()))
+            .count();
+    long doneCount = reserves.stream()
+            .filter(r -> "9".equals(r.getReserveStatus()))
+            .count();
+    long cancelCount = reserves.stream()
+            .filter(r -> "C".equals(r.getReserveStatus()))
+            .count();
+
+    // 4) 화면에 전달
+    model.addAttribute("reserves", reserves);
+    model.addAttribute("activeCount", activeCount);
+    model.addAttribute("doneCount", doneCount);
+    model.addAttribute("cancelCount", cancelCount);
+
     return "pages/reserve/reserve_list";
   }
 }

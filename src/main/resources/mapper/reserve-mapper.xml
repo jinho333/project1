@@ -20,6 +20,8 @@
     <result property="reserveStatus" column="RESERVE_STATUS"/>
     <result property="visitAddr" column="VISIT_ADDR"/>
     <result property="visitAddrDetail" column="VISIT_ADDR_DETAIL"/>
+    <result property="categoryName" column="CATEGORY_NAME"/>
+    <result property="productType"  column="PRODUCT_TYPE"/>
   </resultMap>
 
   <!-- TIME_SLOT 매핑 -->
@@ -49,7 +51,7 @@
     AND RESERVE_STATUS != 'C'
   </select>
 
-  <!-- 회원 예약 목록 (JOIN) -->
+  <!-- 회원 예약 목록 (JOIN: TIME_SLOT, CATEGORY) -->
   <select id="selectReserveByMemId" resultMap="ReserveResultMap">
     SELECT
     R.RESERVE_NO
@@ -57,6 +59,8 @@
     , R.MEM_ID
     , R.TECHNICIAN_ID
     , R.CATEGORY_NO
+    , C.CATEGORY_NAME
+    , C.PRODUCT_TYPE
     , R.RESERVE_DATE
     , R.SLOT_NO
     , T.SLOT_START
@@ -69,6 +73,7 @@
     , R.VISIT_ADDR_DETAIL
     FROM RESERVE R
     JOIN TIME_SLOT T ON R.SLOT_NO = T.SLOT_NO
+    JOIN CATEGORY C ON R.CATEGORY_NO = C.CATEGORY_NO
     WHERE R.MEM_ID = #{memId}
     ORDER BY R.RESERVE_DATE DESC, R.SLOT_NO DESC
   </select>
