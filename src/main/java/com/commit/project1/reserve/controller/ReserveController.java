@@ -1,6 +1,7 @@
 package com.commit.project1.reserve.controller;
 
 import com.commit.project1.member.dto.MemberDTO;
+import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
 import com.commit.project1.reserve.service.ReserveService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,13 +26,22 @@ public class ReserveController {
 
   //예약 정보 입력 관련 컨트롤러
   @GetMapping("/form")
-  public String reserveForm(){
+  public String reserveForm(HttpSession session, Model model){
+
+    //로그인한 회원 주소 (세션에서 아이디를 찾자!)
+   MemberDTO member = (MemberDTO) session.getAttribute("loginInfo");
+   if (member != null){
+     String memId = member.getMemId();
+     model.addAttribute("member", reserveService.selectMember(memId));
+   }
+
     return "pages/reserve/reserve_form";
   }
 
   // 예약 시간 선택 페이지
-  @GetMapping("/time")
-  public String reserveTime(){
+  @PostMapping("/form-submit")
+  public String reserveTime(ReserveDTO reserveDTO){
+    System.out.println(reserveDTO);
     return "pages/reserve/reserve_time";
   }
 
