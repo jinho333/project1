@@ -45,6 +45,11 @@ public class ReserveService {
     return reserveMapper.selectReservedTimesByDate(date);
   }
 
+  //모든 예약 정보 조회
+  public List<ReserveDTO> selectReserves(){
+    return reserveMapper.selectReserves();
+  }
+
 
 
 }

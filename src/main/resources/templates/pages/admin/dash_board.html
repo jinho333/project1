@@ -20,9 +20,10 @@
           <span class="kpi-card__label">오늘 접수</span>
           <div class="kpi-card__icon"><i class="bi bi-file-earmark-text"></i></div>
         </div>
-        <div class="kpi-card__value">24<small>건</small></div>
+        <div class="kpi-card__value">[[${#lists.size(reserves.?[#temporals.format(registDate, 'yyyy-MM-dd') == #temporals.format(#temporals.createToday(), 'yyyy-MM-dd') ])}]]<small>건</small></div>
+        <!-- ?[]는 []안의 조건을 만족하는 요소만 필터링하는 역할, createNow()는 현재 날짜 시간을 반환하는 함수 -->
         <div class="kpi-card__delta">
-          <i class="bi bi-arrow-up-right"></i> 어제 동시간 대비 12% 증가
+          <!-- <i class="bi bi-arrow-up-right"></i> 어제 동시간 대비 12% 증가 -->
         </div>
       </div>
 
@@ -31,8 +32,8 @@
           <span class="kpi-card__label">처리 완료</span>
           <div class="kpi-card__icon green"><i class="bi bi-check2-all"></i></div>
         </div>
-        <div class="kpi-card__value">18<small>건</small></div>
-        <div class="kpi-note">현재 진행중인 접수: <span>6건</span></div>
+        <div class="kpi-card__value">[[${#lists.size(reserves.?[reserveStatus == '1'])}]]<small>건</small></div>
+        <div class="kpi-note">현재 진행중인 접수: [[${#lists.size(reserves.?[reserveStatus == '0'])}]]<span>건</span></div>
       </div>
 
       <div class="kpi-card">
@@ -40,8 +41,9 @@
           <span class="kpi-card__label">처리율 (배정 및 완료)</span>
           <div class="kpi-card__icon blue"><i class="bi bi-lightning-fill"></i></div>
         </div>
-        <div class="kpi-card__value">75<small>%</small></div>
-        <div class="progress"><div class="progress__fill" style="width:75%"></div></div>
+        <div class="kpi-card__value">[[${(#lists.size(reserves.?[reserveStatus == '1'])*100)/(#lists.size(reserves)-0)}]]<small>%</small></div>
+        <!-- -0은 문자열을 정수로 바꾸기 위한 조치 -->
+        <div class="progress"><div class="progress__fill" th:style="|width:${(#lists.size(reserves.?[reserveStatus == '1'])*100)/(#lists.size(reserves)-0)}%|"></div></div>
       </div>
 
       <div class="kpi-card">
@@ -60,9 +62,40 @@
 
       <!-- 좌측 : 기사별 처리 건수 -->
       <div class="card card-lg bar-card">
-        <div class="chart-head">
+        <!-- <div class="chart-head">
           <div>
             <h2>기사별 처리 건수 (Top 5)</h2>
+            <p>이번 주 누적 처리 완료 기준</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm">
+            더보기 <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="bar-chart">
+          <div class="y-axis">
+            <span>40</span><span>30</span><span>20</span><span>10</span><span>0</span>
+          </div>
+          <div class="bar-list">
+            <div class="bar-item"><div class="bar" style="height:95%; background:var(--color-primary);"></div></div>
+            <div class="bar-item"><div class="bar" style="height:80%; background:var(--color-primary-light);"></div></div>
+            <div class="bar-item"><div class="bar" style="height:70%; background:#60A5FA;"></div></div>
+            <div class="bar-item"><div class="bar" style="height:60%; background:var(--color-primary-soft);"></div></div>
+            <div class="bar-item"><div class="bar" style="height:45%; background:var(--color-primary-pale);"></div></div>
+          </div>
+        </div>
+
+        <div class="bar-labels">
+          <div><p class="name">김철수</p><p class="area">강남구</p></div>
+          <div><p class="name">이영희</p><p class="area">서초구</p></div>
+          <div><p class="name">박지성</p><p class="area">송파구</p></div>
+          <div><p class="name">정우성</p><p class="area">마포구</p></div>
+          <div><p class="name">최민호</p><p class="area">용산구</p></div>
+        </div> -->
+        
+        <div class="chart-head">
+          <div>
+            <h2>카테고리별 처리 건수 (Top 5)</h2>
             <p>이번 주 누적 처리 완료 기준</p>
           </div>
           <button type="button" class="btn btn-secondary btn-sm">
