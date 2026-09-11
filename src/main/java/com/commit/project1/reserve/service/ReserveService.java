@@ -52,5 +52,11 @@ public class ReserveService {
   public MemberDTO selectMember(String memId){
     return reserveMapper.selectMember(memId);
   }
+  //모든 예약 정보 조회
+  public List<ReserveDTO> selectReserves(){
+    return reserveMapper.selectReserves();
+  }
+
+
 
 }

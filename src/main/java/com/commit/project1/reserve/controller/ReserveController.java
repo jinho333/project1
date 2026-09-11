@@ -7,6 +7,7 @@ import com.commit.project1.reserve.service.ReserveService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReserveController {
   private final ReserveService reserveService;
+  @Value("${file.upload.dir}")
+  private String uploadPath;  //첨부파일 업로드 경로 담을 문자열 변수
 
   //예약 정보 입력 관련 컨트롤러
   @GetMapping("/form")
@@ -105,7 +108,13 @@ public class ReserveController {
 
   //예약 조회
   @GetMapping("/list")
-  public String reserveList(){
+  public String reserveList(HttpServletRequest request, Model model){
+    HttpSession session = request.getSession();
+    MemberDTO loginInfo = (MemberDTO) session.getAttribute("loginInfo");
+    if( loginInfo != null ) {
+      model.addAttribute("reserves", reserveService.getReservesByMemId(loginInfo.getMemId()));
+    }
+
     return "pages/reserve/reserve_list";
   }
 

@@ -20,4 +20,14 @@ public class MemberController {
   public String loginForm(){
     return "pages/member/login";
   }
+
+  //로그아웃
+  @GetMapping("/logout")
+  public String logout(HttpServletRequest request){
+    HttpSession session = request.getSession(); // 세션 생성
+    session.invalidate();  //세션 초기화
+
+    return "redirect:/";
+  }
+
 }

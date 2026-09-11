@@ -27,6 +27,9 @@ public interface ReserveMapper {
 
   //로그인한 회원의 주소를 조회
   MemberDTO selectMember(String memId);
+  //모든 예약 정보 조회
+  List<ReserveDTO> selectReserves();
+
 
 
 

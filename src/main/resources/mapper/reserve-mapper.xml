@@ -111,6 +111,26 @@
       , ADDR_DETAIL
     FROM MEMBER
     WHERE MEM_ID = #{memId}
+  <!--모든 예약 내역 조회 -->
+  <select id="selectReserves" resultMap="ReserveResultMap">
+    SELECT RESERVE_NO
+    ,MODEL_NAME
+    ,MEM_ID
+    ,TECHNICIAN_ID
+    ,CATEGORY_NO
+    ,RESERVE_DATE
+    ,REGIST_DATE
+    ,RESERVE_STATUS
+    ,VISIT_ADDR
+    FROM RESERVE
+  </select>
+
+  <!--카테고리별 예약 내역 건수 조회-->
+  <select id="countReserveByCate" resultType="Long">
+    SELECT COUNT(CATEGORY_NO)
+    FROM RESERVE
+    GROUP BY CATEGORY_NO
+    ORDER BY CATEGORY_NO DESC
   </select>
 
 </mapper>
