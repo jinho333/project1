@@ -23,6 +23,9 @@ public interface ReserveMapper {
   // 특정 날짜에 예약된 시간 목록 조회
   List<String> selectReservedTimesByDate(String date);
 
+  //모든 예약 정보 조회
+  List<ReserveDTO> selectReserves();
+
 
 
 
