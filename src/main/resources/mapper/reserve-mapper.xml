@@ -3,20 +3,37 @@
 
 <mapper namespace="com.commit.project1.reserve.mapper.ReserveMapper">
 
+  <!-- RESERVE + TIME_SLOT 조인 결과 매핑 -->
   <resultMap id="ReserveResultMap" type="com.commit.project1.reserve.dto.ReserveDTO">
-    <id     property="reserveNo"       column="RESERVE_NO"/>
-    <result property="modelName"       column="MODEL_NAME"/>
-    <result property="memId"           column="MEM_ID"/>
-    <result property="technicianId"    column="TECHNICIAN_ID"/>
-    <result property="categoryNo"      column="CATEGORY_NO"/>
-    <result property="reserveDate"     column="RESERVE_DATE"/>
-    <result property="registDate"      column="REGIST_DATE"/>
-    <result property="symptom"         column="SYMPTOM"/>
-    <result property="reserveStatus"   column="RESERVE_STATUS"/>
-    <result property="visitAddr"       column="VISIT_ADDR"/>
+    <id property="reserveNo" column="RESERVE_NO"/>
+    <result property="modelName" column="MODEL_NAME"/>
+    <result property="memId" column="MEM_ID"/>
+    <result property="technicianId" column="TECHNICIAN_ID"/>
+    <result property="categoryNo" column="CATEGORY_NO"/>
+    <result property="reserveDate" column="RESERVE_DATE"/>
+    <result property="slotNo" column="SLOT_NO"/>
+    <result property="slotStart" column="SLOT_START"/>
+    <result property="slotEnd" column="SLOT_END"/>
+    <result property="slotLabel" column="SLOT_LABEL"/>
+    <result property="registDate" column="REGIST_DATE"/>
+    <result property="symptom" column="SYMPTOM"/>
+    <result property="reserveStatus" column="RESERVE_STATUS"/>
+    <result property="visitAddr" column="VISIT_ADDR"/>
     <result property="visitAddrDetail" column="VISIT_ADDR_DETAIL"/>
+    <result property="categoryName" column="CATEGORY_NAME"/>
+    <result property="productType"  column="PRODUCT_TYPE"/>
   </resultMap>
 
+  <!-- TIME_SLOT 매핑 -->
+  <resultMap id="TimeSlotResultMap" type="com.commit.project1.reserve.dto.TimeSlotDTO">
+    <id property="slotNo" column="SLOT_NO"/>
+    <result property="slotStart" column="SLOT_START"/>
+    <result property="slotEnd" column="SLOT_END"/>
+    <result property="slotLabel" column="SLOT_LABEL"/>
+  </resultMap>
+
+  <!-- 전체 슬롯 조회 -->
+  <select id="selectAllTimeSlots" resultMap="TimeSlotResultMap">
   <resultMap id="category" type="com.commit.project1.reserve.dto.CategoryDTO">
     <id column="CATEGORY_NO" property="categoryNo"/>
     <result column="CATEGORY_NAME" property="categoryName"/>
@@ -26,38 +43,70 @@
   <!-- 특정 회원의 예약 목록 조회 -->
   <select id="selectReserveByMemId" resultMap="ReserveResultMap">
     SELECT
-    RESERVE_NO
-    , MODEL_NAME
-    , MEM_ID
-    , TECHNICIAN_ID
-    , CATEGORY_NO
-    , RESERVE_DATE
-    , REGIST_DATE
-    , SYMPTOM
-    , RESERVE_STATUS
-    , VISIT_ADDR
-    , VISIT_ADDR_DETAIL
-    FROM RESERVE
-    WHERE MEM_ID = #{memId}
-    ORDER BY RESERVE_DATE DESC
+    SLOT_NO
+    , SLOT_START
+    , SLOT_END
+    , SLOT_LABEL
+    FROM TIME_SLOT
+    ORDER BY SLOT_NO
   </select>
 
-  <!-- 예약 상세 조회 -->
+  <!-- 특정 날짜에 이미 예약된 SLOT_NO 목록 (취소 제외) -->
+  <select id="selectReservedSlotNosByDate" resultType="int">
+    SELECT SLOT_NO
+    FROM RESERVE
+    WHERE RESERVE_DATE = #{date}
+    AND RESERVE_STATUS != 'C'
+  </select>
+
+  <!-- 회원 예약 목록 (JOIN: TIME_SLOT, CATEGORY) -->
+  <select id="selectReserveByMemId" resultMap="ReserveResultMap">
+    SELECT
+    R.RESERVE_NO
+    , R.MODEL_NAME
+    , R.MEM_ID
+    , R.TECHNICIAN_ID
+    , R.CATEGORY_NO
+    , C.CATEGORY_NAME
+    , C.PRODUCT_TYPE
+    , R.RESERVE_DATE
+    , R.SLOT_NO
+    , T.SLOT_START
+    , T.SLOT_END
+    , T.SLOT_LABEL
+    , R.REGIST_DATE
+    , R.SYMPTOM
+    , R.RESERVE_STATUS
+    , R.VISIT_ADDR
+    , R.VISIT_ADDR_DETAIL
+    FROM RESERVE R
+    JOIN TIME_SLOT T ON R.SLOT_NO = T.SLOT_NO
+    JOIN CATEGORY C ON R.CATEGORY_NO = C.CATEGORY_NO
+    WHERE R.MEM_ID = #{memId}
+    ORDER BY R.RESERVE_DATE DESC, R.SLOT_NO DESC
+  </select>
+
+  <!-- 예약 상세 (JOIN) -->
   <select id="selectReserveByNo" resultMap="ReserveResultMap">
     SELECT
-    RESERVE_NO
-    , MODEL_NAME
-    , MEM_ID
-    , TECHNICIAN_ID
-    , CATEGORY_NO
-    , RESERVE_DATE
-    , REGIST_DATE
-    , SYMPTOM
-    , RESERVE_STATUS
-    , VISIT_ADDR
-    , VISIT_ADDR_DETAIL
-    FROM RESERVE
-    WHERE RESERVE_NO = #{reserveNo}
+    R.RESERVE_NO
+    , R.MODEL_NAME
+    , R.MEM_ID
+    , R.TECHNICIAN_ID
+    , R.CATEGORY_NO
+    , R.RESERVE_DATE
+    , R.SLOT_NO
+    , T.SLOT_START
+    , T.SLOT_END
+    , T.SLOT_LABEL
+    , R.REGIST_DATE
+    , R.SYMPTOM
+    , R.RESERVE_STATUS
+    , R.VISIT_ADDR
+    , R.VISIT_ADDR_DETAIL
+    FROM RESERVE R
+    JOIN TIME_SLOT T ON R.SLOT_NO = T.SLOT_NO
+    WHERE R.RESERVE_NO = #{reserveNo}
   </select>
 
   <!-- 예약 등록 -->
@@ -68,6 +117,7 @@
     , TECHNICIAN_ID
     , CATEGORY_NO
     , RESERVE_DATE
+    , SLOT_NO
     , SYMPTOM
     , RESERVE_STATUS
     , VISIT_ADDR
@@ -78,6 +128,7 @@
     , #{technicianId}
     , #{categoryNo}
     , #{reserveDate}
+    , #{slotNo}
     , #{symptom}
     , #{reserveStatus}
     , #{visitAddr}
@@ -85,7 +136,7 @@
     )
   </insert>
 
-<!-- 예약 상태 변경 (예: 취소, 완료 처리) -->
+  <!-- 예약 상태 변경 -->
   <update id="updateReserveStatus">
     UPDATE RESERVE
     SET RESERVE_STATUS = #{reserveStatus}

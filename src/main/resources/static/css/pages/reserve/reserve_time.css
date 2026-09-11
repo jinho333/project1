@@ -4,12 +4,16 @@
 
 .time-wrap {
   display: flex;
-  gap: 48px;
-  padding: 40px !important;
+  gap: 32px;        
+  padding: 40px;
 }
 
+/* =========================================================
+   캘린더 영역
+   ========================================================= */
+
 .calendar-area {
-  width: 420px;
+  width: 560px;     
   flex-shrink: 0;
 }
 
@@ -19,16 +23,20 @@
   margin-bottom: 24px;
 }
 
+/* =========================================================
+   슬롯 영역
+   ========================================================= */
+
 .slot-area {
   flex: 1;
+  max-width: 400px;       /* 슬롯 영역 최대 너비 제한 */
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-
 /* =========================================================
-   슬롯 헤더 (날짜 + 범례)
+   슬롯 헤더 (선택한 날짜 제목)
    ========================================================= */
 
 .slot-head {
@@ -56,54 +64,33 @@
   font-size: 1rem;
 }
 
-
-/* 범례 (선택 가능 / 마감) */
-.slot-legend {
-  display: flex;
-  gap: 16px;
-  padding: 10px 16px;
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  font-weight: 500;
-}
-
-.slot-legend span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-}
-
-.dot-avail {
-  border: 2px solid var(--color-primary);
-  background: var(--color-surface);
-}
-
-.dot-close {
-  background: var(--color-border);
-}
-
-.slot-legend span:last-child {
-  color: var(--color-text-subtle);
-}
-
-
 /* =========================================================
    슬롯 그리드
    ========================================================= */
 
 .slot-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
   margin-bottom: auto;
+}
+
+/* 슬롯 기본 스타일 */
+.slot {
+  position: relative;
+  padding: 16px 20px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: center;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .slot-label {
@@ -111,106 +98,132 @@
   cursor: pointer;
 }
 
+/* 라디오 버튼은 화면에서 숨김 (checked 상태는 유지) */
 .slot-input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
-.slot {
-  position: relative;
+.slot:hover {
+  background-color: var(--color-surface-alt);
+  border-color: var(--color-border);
 }
-
 
 /* =========================================================
-   마감 임박 슬롯 (13:00 등)
+   선택된 슬롯 강조
    ========================================================= */
 
-.slot--closing {
-  position: relative;
-  border: 2px solid var(--color-accent-orange);
-  color: var(--color-accent-orange);
+.slot-input:checked + .slot {
+  background-color: var(--color-primary);
+  color: #ffffff;
   font-weight: 700;
-  animation: pulse-border 2s infinite;
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
 }
 
-.closing-tag {
-  position: absolute;
-  top: -12px;
-  right: -6px;
-  background: var(--color-accent-orange);
-  color: #FFF;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xs);
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 2;
+.slot-input:checked + .slot:hover {
+  background-color: var(--color-primary-hover);
+  color: #ffffff;
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.28);
 }
-
 
 /* =========================================================
-   ✅ 예약 마감 슬롯 (선택 불가)
-   - JS에서 라디오 버튼을 생성하지 않으므로 클릭 자체가 불가
-   - 시각적으로 확실히 구분되도록 회색 + 취소선 + "마감" 배지
+   예약 불가 슬롯 (마감)
    ========================================================= */
 
 .slot--disabled {
-  background-color: #F3F4F6;              /* 연한 회색 배경 */
-  color: var(--color-text-subtle);        /* 흐린 텍스트 */
-  border: 1px dashed var(--color-border); /* 점선 테두리 */
-  text-decoration: line-through;          /* 취소선 */
-  cursor: not-allowed;                    /* 클릭 금지 커서 */
+  background-color: #f3f4f6;
+  color: var(--color-text-subtle);
+  border: 1px solid transparent;
+  text-decoration: line-through;
+  cursor: not-allowed;
   box-shadow: none;
-  transform: none;
-  opacity: 0.75;
+  opacity: 0.55;
   position: relative;
 }
 
-/* hover 시에도 아무 효과 없음 (마감 슬롯이므로) */
 .slot--disabled:hover {
-  background-color: #F3F4F6;
-  border-color: var(--color-border);
+  background-color: #f3f4f6;
+  border-color: transparent;
   color: var(--color-text-subtle);
   box-shadow: none;
-  transform: none;
 }
-
-/* 마감 배지 (우측 상단) */
-.slot--disabled::after {
-  content: "마감";
-  position: absolute;
-  top: -8px;
-  right: -4px;
-  background: var(--color-accent-red);
-  color: #FFF;
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  z-index: 2;
-}
-
 
 /* =========================================================
    하단 버튼 영역
+   - 두 버튼(이전 단계 / 예약 확정하기)을 같은 크기로 통일
+   - hover 반응도 동일하게 통일
    ========================================================= */
 
 .slot-area .form-footer {
   margin-top: 40px;
   padding-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
+/* 두 버튼이 정확히 50:50 폭을 갖도록 균등 분배 */
+.slot-area .form-footer .btn {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  text-align: center;
+  justify-content: center;
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+/* 아이콘 크기 살짝 축소 */
+.slot-area .form-footer .btn i {
+  font-size: 14px;
+}
+
+/* 두 버튼 모두 hover 시 동일하게 위로 살짝 들림 */
+.slot-area .form-footer .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
 
 /* =========================================================
-   FullCalendar 컨테이너 높이
+   FullCalendar 상단 툴바 ([<] 제목 [>])
+   - 제목 양옆에 원형 화살표 버튼 배치
    ========================================================= */
 
-#calendar {
-  height: 400px;
-  max-width: 100%;
+.fc .fc-button {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+/* prev/next 화살표 버튼 다듬기 */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: var(--radius-pill);
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-base);
+}
+
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  border-color: var(--color-primary-soft);
+}
+
+.fc .fc-icon {
+  font-size: 1rem;
 }

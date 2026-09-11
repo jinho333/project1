@@ -3,6 +3,7 @@ package com.commit.project1.reserve.dto;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -18,15 +19,34 @@ public class ReserveDTO {
   private String visitAddr;            // 방문 주소
   private String visitAddrDetail;      // 상세 방문 주소
 
+  // 방문 날짜 (날짜만) — 시각은 SLOT_NO로 별도 관리
+  // @DateTimeFormat: JS가 보내는 "yyyy-MM-dd" 문자열을 LocalDate로 변환
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  private LocalDate reserveDate;    // 방문 일시
+  private LocalDateTime registDate; // 등록 일시 (DB 자동 입력)
+  // 시간 슬롯 번호 (TIME_SLOT.SLOT_NO 참조)
+  private Long slotNo;         // 슬롯 번호
+  private String slotStart;    // 시작 시간
+  private String slotEnd;      // 종료 시간
+  private String slotLabel;    // 화면 표시용 라벨
 
-  // @DateTimeFormat: 프론트(JS)에서 넘어오는 문자열을 LocalDateTime으로 변환
-  // 형식: "yyyy-MM-dd HH:mm:ss" (예: 2026-09-10 10:00:00)
-  // JS가 보내는 형식과 반드시 일치해야 함 (불일치 시 에러 발생)
-  // 관련 파일: reserve_time.js, reserve_time.html
-  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDateTime reserveDate;   // 희망 방문 일시 (LocalDateTime)
-  private LocalDateTime registDate;    // 등록 일시 (DB 자동 입력, 조회용)
+  // 조회 시 JOIN으로 채워지는 필드 (INSERT 시엔 사용 안 함)
+  private String categoryName;   // 카테고리명 (예: '에어컨')
+  private String productType;    // 제품 유형 ('냉방' / '난방')
 
 
+   // 예약 상태 코드를 진행 단계(0~4)로 변환
+   // - 진행바 표시용 (Thymeleaf에서 ${r.statusStep}로 접근)
+   // - 0: 취소 / 1: 접수 / 2: 배정 / 3: 방문중 / 4: 완료
+
+  public int getStatusStep() {
+    return switch (this.reserveStatus) {
+      case "0" -> 1;
+      case "1" -> 2;
+      case "2" -> 3;
+      case "9" -> 4;
+      default  -> 0;  // 'C' 취소
+    };
+  }
 
 }
