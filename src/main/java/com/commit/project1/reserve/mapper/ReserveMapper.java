@@ -35,8 +35,13 @@ public interface ReserveMapper {
   //모든 예약 정보 조회
   List<ReserveDTO> selectReserves();
 
+
+  //예약 페이지 카테고리 조회
+  List<CategoryDTO> selectCategory(String productType);
+
   // 예약 상태 변경 (취소/배정/완료 등)
   int updateReserveStatus(ReserveDTO dto);
+
 
 
 

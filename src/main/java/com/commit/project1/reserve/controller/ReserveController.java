@@ -26,14 +26,14 @@ public class ReserveController {
 
   // 폼 페이지
   @GetMapping("/form")
-  public String reserveForm(HttpSession session, Model model) {
+  public String reserveForm(HttpSession session, Model model){
+    //로그인한 회원 주소
+   MemberDTO member = (MemberDTO) session.getAttribute("loginInfo");
+   if (member != null){
+     String memId = member.getMemId();
+     model.addAttribute("member", reserveService.selectMember(memId));
+   }
 
-    //로그인한 회원 주소 (세션에서 아이디를 찾자!)
-    MemberDTO member = (MemberDTO) session.getAttribute("loginInfo");
-    if (member != null) {
-      String memId = member.getMemId();
-      model.addAttribute("member", reserveService.selectMember(memId));
-    }
 
     return "pages/reserve/reserve_form";
   }
@@ -45,6 +45,8 @@ public class ReserveController {
   }
 
 
+
+  //  특정 날짜의 예약 가능 시간을 JSON으로 반환하는 API
   @PostMapping("/form-submit")
   public String reserveTime(ReserveDTO reserveDTO) {
 

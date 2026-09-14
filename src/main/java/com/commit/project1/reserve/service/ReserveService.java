@@ -54,6 +54,12 @@ public class ReserveService {
     return reserveMapper.selectReserves();
   }
 
+
+  //예약페이지 카테고리 조회
+   public List<CategoryDTO> selectCategory(String productType){
+    return reserveMapper.selectCategory(productType);
+   }
+
   // 전체 시간 슬롯 조회
   public List<TimeSlotDTO> getAllTimeSlots() {
     return reserveMapper.selectAllTimeSlots();
@@ -104,7 +110,5 @@ public class ReserveService {
     // 모든 검증을 통과 → null 반환 , 호출한 쪽에서 null을 받으면 성공 으로 해석
     return null;
   }
-
-
 
 }

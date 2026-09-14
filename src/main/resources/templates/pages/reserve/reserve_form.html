@@ -6,6 +6,7 @@
 <!--이 곳에 link태그로 css파일을 연결하는 코드 작성-->
 <th:block layout:fragment="content_css">
   <link rel="stylesheet" href="/css/pages/reserve/reserve_form.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </th:block>
 
 <!--아래 block에 html 코드 작성-->
@@ -51,38 +52,11 @@
             <h3><span class="q-mark">Q.</span> 어떤 기기에 문제가 있나요?</h3>
             
             <div class="cate-tab">
-              <button type="button" class="tab active" name="productType" value="냉방">냉방 기기</button>
-              <button type="button" class="tab" name="productType"  value="난방">난방 기기</button>
+              <button type="button" class="tab active" name="productType" value="냉방" onclick="goProduct(this.value, this)" id="coolbtn">냉방 기기</button>
+              <button type="button" class="tab" name="productType" value="난방" onclick="goProduct(this.value, this)" id="heatbtn">난방 기기</button>
             </div>
-            <div class="product-grid">
-              <label class="radio-card">
-                <input type="radio" name="categoryNo" value="1" class="radio-card__input" checked>
-                <div class="radio-card__body product-card">
-                  <i class="bi bi-snow2"></i>
-                  <span>에어컨</span>
-                </div>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="categoryNo" value="2" class="radio-card__input">
-                <div class="radio-card__body product-card">
-                  <i class="bi bi-fan"></i>
-                  <span>실외기</span>
-                </div>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="categoryNo" value="4" class="radio-card__input">
-                <div class="radio-card__body product-card">
-                  <i class="bi bi-wind"></i>
-                  <span>제습</span>
-                </div>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="categoryNo" value="5" class="radio-card__input">
-                <div class="radio-card__body product-card">
-                  <i class="bi bi-three-dots"></i>
-                  <span>기타 기기</span>
-                </div>
-              </label>
+            <div class="product-grid" id="product-grid">
+
             </div>
             <p id="productP" class="valigate-p invalid"></p>
           </section>
@@ -95,19 +69,6 @@
             <textarea class="form-control" name="symptom"
               placeholder="예시)&#10;- 전원이 아예 켜지지 않아요.&#10;- 실외기는 돌아가는데 미지근한 바람만 나옵니다.&#10;- 작동 중에 '덜덜덜' 하는 큰 소음이 발생해요."></textarea>
             <p id="symptomP" class="valigate-p invalid"></p>
-          </section>
-
-          <!-- 사진 첨부 -->
-          <section class="form-section">
-            <h3 class="sub-h3">현장 사진이 있다면 첨부해주세요 (선택)</h3>
-            <label for="attach">
-              <div class="file-dropzone">
-                <div class="file-dropzone__icon"><i class="bi bi-camera-fill"></i></div>
-                <p class="drop-title">클릭하거나 사진을 이곳으로 드래그 하세요.</p>
-                <p class="drop-desc">에러 코드가 표시된 디스플레이, 파손 부위 등 (최대 3장)</p>
-                <input type="file" style="display: none;" id="attach">
-              </div>
-            </label>
           </section>
 
           <hr class="divider">

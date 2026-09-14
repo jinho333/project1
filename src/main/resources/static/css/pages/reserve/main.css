@@ -197,3 +197,18 @@
 .driver-info img { width: 40px; height: 40px; border-radius: var(--radius-pill); }
 .driver-info .name { font-weight: 700; font-size: 0.9rem; }
 .driver-info .desc { font-size: 0.75rem; color: var(--color-text-muted); }
+
+.profile-img{
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 2px 2px 8px rgb(0, 0, 0, 0.7);
+}
+
+.reserve-text{
+  display: flex;
+  gap: 5px;
+}
+
+.reserve-text{
+  color: gray !important;
+}
