@@ -51,12 +51,11 @@
     <div class="reserve-main">
       <form action="/reserve/complete" method="post" id="reserve-time-form">
 
-        <!-- 1단계 정보 (임시: URL 파라미터에서 전달받음) -->
-        <input type="hidden" name="modelName"       th:value="${modelName}">
-        <input type="hidden" name="symptom"         th:value="${symptom}">
-        <input type="hidden" name="categoryNo"      th:value="${categoryNo}">
-        <input type="hidden" name="visitAddr"       th:value="${visitAddr}">
-        <input type="hidden" name="visitAddrDetail" th:value="${visitAddrDetail}">
+        <input type="hidden" name="modelName" th:value="${reserveDTO.modelName}">
+        <input type="hidden" name="symptom" th:value="${reserveDTO.symptom}">
+        <input type="hidden" name="categoryNo" th:value="${reserveDTO.categoryNo}">
+        <input type="hidden" name="visitAddr" th:value="${reserveDTO.visitAddr}">
+        <input type="hidden" name="visitAddrDetail" th:value="${reserveDTO.visitAddrDetail}">
 
         <!-- 방문 날짜 (JS가 채움) / 시간은 슬롯 라디오(slotNo)로 별도 전송 -->
         <input type="hidden" name="reserveDate" id="reserveDateInput">
