@@ -36,8 +36,7 @@
     <result property="slotLabel" column="SLOT_LABEL"/>
   </resultMap>
 
-
-  <!-- 전체 슬롯 조회 -->
+  <!-- 전체 타임슬롯 조회 -->
   <select id="selectAllTimeSlots" resultMap="timeslot">
     SELECT
     SLOT_NO
@@ -48,16 +47,15 @@
     ORDER BY SLOT_NO
   </select>
 
-
   <!-- 특정 날짜에 이미 예약된 SLOT_NO 목록 (취소 제외) -->
-  <select id="selectReservedSlotNosByDate" resultType="int">
+  <select id="selectReservedSlotNosByDate" resultType="Long">
     SELECT SLOT_NO
     FROM RESERVE
     WHERE RESERVE_DATE = #{date}
     AND RESERVE_STATUS != 'C'
   </select>
 
-  <!-- 예약 상세 (JOIN) -->
+  <!-- 예약 상세 조회 (JOIN TIME_SLOT) -->
   <select id="selectReserveByNo" resultMap="reserve">
     SELECT
     R.RESERVE_NO
@@ -107,7 +105,7 @@
     )
   </insert>
 
-  <!-- 예약 상태 변경 -->
+  <!-- 예약 상태 변경 (취소/배정/완료 등) -->
   <update id="updateReserveStatus">
     UPDATE RESERVE
     SET RESERVE_STATUS = #{reserveStatus}
@@ -149,7 +147,7 @@
     FROM RESERVE
   </select>
 
-  <!-- 회원 예약 목록 (JOIN: TIME_SLOT, CATEGORY) -->
+  <!-- 회원아이디로 예약 목록 조회 -->
   <select id="selectReserveByMemId" resultMap="reserve">
     SELECT
     R.RESERVE_NO
