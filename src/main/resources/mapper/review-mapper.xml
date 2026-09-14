@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 해당 파일에 모든 쿼리문을 작성 -->
+<!-- namespace에는 xml파일과 연결할 Mapper interface 파일명을 패키지를 포함하여 적어주세요 -->
+<mapper namespace="com.commit.project1.review.mapper.ReviewMapper">
+  <resultMap id="review" type="com.commit.project1.review.dto.ReviewDTO">
+    <id column="REVIEW_NO" property="reviewNo"/>
+    <result column="RATING" property="rating"/>
+    <result column="CONTENT" property="content"/>
+    <result column="RESERVE_NO" property="reserveNo"/>
+    <result column="REVIEW_DATE" property="reviewDate"/>
+  </resultMap>
+
+  <insert id="reviewReg" >
+    INSERT INTO REVIEW (
+    RATING
+    , CONTENT
+    , RESERVE_NO
+    ) VALUES(
+    #{rating}
+    ,#{content}
+    ,#{reserveNo}
+    )
+  </insert>
+
+  <select id="selectReviews" resultMap="review">
+    SELECT REVIEW_NO
+    , RATING
+    , CONTENT
+    , RESERVE_NO
+    FROM REVIEW
+    ORDER BY REVIEW_DATE DESC
+  </select>
+  
+  <select id="selectStats" resultType="HashMap">
+    SELECT
+    COUNT(*) AS totalCount,
+    ROUND(AVG(RATING), 1) AS avgRating,
+    SUM(CASE WHEN RATING = 5 THEN 1 ELSE 0 END) AS star5,
+    SUM(CASE WHEN RATING = 4 THEN 1 ELSE 0 END) AS star4,
+    SUM(CASE WHEN RATING &lt;= 3 THEN 1 ELSE 0 END) AS star3Below
+    FROM REVIEW
+  </select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
