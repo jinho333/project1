@@ -5,7 +5,7 @@
 
 <!-- CSS -->
 <th:block layout:fragment="content_css">
-  <!-- FullCalendar 7.1.0 CSS -->
+  <!-- FullCalendar CSS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/skeleton.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/themes/monarch/theme.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/themes/monarch/palettes/blue.css" rel="stylesheet">
@@ -51,6 +51,7 @@
     <div class="reserve-main">
       <form action="/reserve/complete" method="post" id="reserve-time-form">
 
+        <!-- 1단계에서 넘어온 값 (hidden) -->
         <input type="hidden" name="modelName" th:value="${reserveDTO.modelName}">
         <input type="hidden" name="symptom" th:value="${reserveDTO.symptom}">
         <input type="hidden" name="categoryNo" th:value="${reserveDTO.categoryNo}">
@@ -65,7 +66,6 @@
           <!-- 캘린더 영역 -->
           <div class="calendar-area">
             <h3>방문 날짜를 선택해주세요</h3>
-            <!-- FullCalendar가 렌더링될 div (내부에 [<] 제목 [>] 툴바 생성됨) -->
             <div id="calendar"></div>
           </div>
 
@@ -80,17 +80,22 @@
               </div>
             </div>
 
-            <!-- JS가 이 안에 슬롯을 동적으로 생성 -->
+            <!-- JS가 슬롯을 동적으로 생성 -->
             <div class="slot-grid" id="slotGrid"></div>
 
+            <!-- JS가 넣는 검증 메시지 (슬롯 미선택 등) -->
             <p id="timeP" class="valigate-p invalid"></p>
-            <p th:if="${error}" th:text="${error}" style="color:red; font-weight:700;"></p>
+
+            <!-- AJAX 응답의 error 메시지를 JS가 여기에 넣음 -->
+            <p id="completeErrorP" class="valigate-p invalid"></p>
 
             <!-- 하단 버튼 -->
             <div class="form-footer">
+
               <a href="/reserve/form" class="btn btn-ghost btn-md">
                 <i class="bi bi-arrow-left"></i> 이전 단계
               </a>
+
               <button type="button" class="btn btn-primary btn-lg" onclick="goComplete()">
                 예약 확정하기 <i class="bi bi-check-lg"></i>
               </button>
@@ -104,7 +109,7 @@
 </th:block>
 
 <th:block layout:fragment="content_js">
-  <!-- FullCalendar 7.1.0 (모든 플러그인 포함 번들) -->
+  <!-- FullCalendar JS -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/all/global.js"></script>
   <!-- 한국어 로케일 -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/locales-all.global.min.js"></script>

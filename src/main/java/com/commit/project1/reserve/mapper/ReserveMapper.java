@@ -14,28 +14,29 @@ public interface ReserveMapper {
   // 전체 슬롯 목록 조회 (TIME_SLOT 테이블)
   List<TimeSlotDTO> selectAllTimeSlots();
 
+  // 예약번호로 상세조회
+  ReserveDTO selectReserveByNo(Long reserveNo);
+
   // 특정 날짜에 이미 예약된 SLOT_NO 목록 조회
   List<Long> selectReservedSlotNosByDate(String date);
 
   // 회원 ID로 예약 목록 조회
   List<ReserveDTO> selectReserveByMemId(String memId);
 
-  // 예약번호로 상세조회
-  ReserveDTO selectReserveByNo(Long reserveNo);
-
   // 예약 저장
   void insertReserve(ReserveDTO dto);
-
-  // 예약 상태 변경
-  int updateReserveStatus(ReserveDTO dto);
 
   // 특정 날짜에 예약된 시간 목록 조회
   List<String> selectReservedTimesByDate(String date);
 
   //로그인한 회원의 주소를 조회
   MemberDTO selectMember(String memId);
+
   //모든 예약 정보 조회
   List<ReserveDTO> selectReserves();
+
+  // 예약 상태 변경 (취소/배정/완료 등)
+  int updateReserveStatus(ReserveDTO dto);
 
 
 
