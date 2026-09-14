@@ -1,10 +1,9 @@
 package com.commit.project1.reserve.controller;
 
 import com.commit.project1.member.dto.MemberDTO;
-import com.commit.project1.reserve.dto.CategoryDTO;
 import com.commit.project1.reserve.dto.ReserveDTO;
+import com.commit.project1.reserve.dto.TimeSlotDTO;
 import com.commit.project1.reserve.service.ReserveService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,11 +19,12 @@ import java.util.Map;
 @RequestMapping("/reserve")
 @RequiredArgsConstructor
 public class ReserveController {
+
   private final ReserveService reserveService;
   @Value("${file.upload.dir}")
   private String uploadPath;  //첨부파일 업로드 경로 담을 문자열 변수
 
-  //예약 정보 입력 관련 컨트롤러
+  // 폼 페이지
   @GetMapping("/form")
   public String reserveForm(HttpSession session, Model model){
     //로그인한 회원 주소
@@ -34,87 +34,197 @@ public class ReserveController {
      model.addAttribute("member", reserveService.selectMember(memId));
    }
 
+
     return "pages/reserve/reserve_form";
   }
 
-  // 예약 시간 선택 페이지
-  @PostMapping("/form-submit")
-  public String reserveTime(ReserveDTO reserveDTO){
-    System.out.println(reserveDTO);
+  @GetMapping("/time")
+  public String timePage(ReserveDTO reserveDTO ) {
+
     return "pages/reserve/reserve_time";
   }
 
 
+
   //  특정 날짜의 예약 가능 시간을 JSON으로 반환하는 API
+  @PostMapping("/form-submit")
+  public String reserveTime(ReserveDTO reserveDTO) {
+
+    System.out.println(reserveDTO);
+
+    return "pages/reserve/reserve_time";
+  }
+
+
+  // 시간 슬롯 조회 API (비동기)
   @GetMapping("/available-times")
   @ResponseBody
   public Map<String, Object> availableTimes(@RequestParam("date") String date) {
 
-    // 전체 시간 슬롯 (09:00 ~ 16:30, 30분 단위) 테이블이 없으므로 임의로 제작
-    List<String> allTimes = List.of(
-            "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-            "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-            "15:00", "15:30", "16:00", "16:30"
-    );
+    // 1) 전체 슬롯 조회 (TIME_SLOT 테이블)
+    //    화면에 4개 슬롯(10-12, 13-15, 15-17, 17-19)을 그리기 위함
+    List<TimeSlotDTO> slots = reserveService.getAllTimeSlots();
 
-    // DB에서 해당 날짜에 이미 예약된 시간 목록 조회
-    List<String> reservedTimes = reserveService.getReservedTimesByDate(date);
+    // 2) 이 날짜의 예약된 슬롯 번호 조회 (취소 'C' 제외)
+    //    → 예약된 슬롯은 화면에서 '마감' 표시
+    List<Long> reservedSlots = reserveService.getReservedSlotNosByDate(date);
 
-    // 결과를 Map으로 묶어 JSON으로 반환 임시로 map 사용 차후 dto를 따로 생성
+    // 3) 두 리스트를 Map으로 묶어 리턴
+    //    - 응답 필드 2개뿐이라 DTO 대신 Map 사용
+    //    - 키 이름이 JSON 키가 되므로 JS(data.slots, data.reservedSlots)와 일치해야 함
+
+    // 두 리스트(slots, reservedSlots)를 하나의 응답으로 묶기
+    // Map은 "키-값" , JS의 오브젝트 ({key: value})와 비슷한 구조
+
+    //   - new HashMap<>(): 빈 Map 생성
+    //   - <String, Object>: 키는 String, 값은 아무 타입(Object) 가능
     Map<String, Object> result = new HashMap<>();
-    result.put("allTimes", allTimes);             // 전체 시간 목록
-    result.put("reservedTimes", reservedTimes);  // 마감된 시간 목록
 
+    // 키 "slots" 에 전체 슬롯 목록을 저장
+    // → JSON 응답에서 "slots" 키로 나감
+    result.put("slots", slots);
+
+    // 키 "reservedSlots" 에 예약된 슬롯 번호 목록을 저장
+    // → JSON 응답에서 "reservedSlots" 키로 나감
+    result.put("reservedSlots", reservedSlots);
+
+    // 이 Map을 리턴하면 @ResponseBody가 자동으로 JSON으로 변환해 응답
     return result;
   }
 
-  // [POST] 예약 확정 처리
-  // - reserve_time.html 폼에서 전송
-  // - 저장 성공 시 완료 페이지로 redirect
+  // 예약 확정 처리
   @PostMapping("/complete")
-  public String completeReserve(ReserveDTO dto, HttpSession session) {
-    // 1. 로그인한 사용자 ID 가져오기
-    //    TODO: 로그인 기능 완성 후 세션에서 정확한 ID를 꺼내도록 수정
-    //    현재는 로그인 기능이 없어서 임시로 "user1" 사용
-    String memId = (String) session.getAttribute("loginId");
-    if (memId == null) {
-      memId = "user1";  // 임시
+  @ResponseBody
+  public Map<String, Object> completeReserve(ReserveDTO dto, HttpSession session) {
+
+    Map<String, Object> result = new HashMap<>();
+
+    // 1) 로그인 체크
+    // 로그인 안 된 상태로 URL 직접 접근 시 로그인 페이지로 보냄
+    // (JS가 redirect 값을 받아 location.href 로 이동)
+    MemberDTO login = (MemberDTO) session.getAttribute("loginInfo");
+    if (login == null) {
+      result.put("success", false);
+      result.put("redirect", "/member/login-form");
+      return result;
     }
-    dto.setMemId(memId);
 
-    // 2. 예약 상태 기본값: '0' = 예약접수
-    dto.setReserveStatus("0");
-
-    // 3. Service 호출 → DB 저장
-    int result = reserveService.saveReserve(dto);
-
-    // 4. 결과에 따라 페이지 이동
-    if (result > 0) {
-      // 저장 성공 → 예약 완료 페이지
-      return "redirect:/reserve/complete-page";
-    } else {
-      // 저장 실패 → 다시 시간 선택 페이지
-      return "redirect:/reserve/time";
+    // 2) 필수값 검증
+    // JS가 이미 검증하지만 개발자도구 조작 대비 서버도 검증
+    if (dto.getReserveDate() == null || dto.getSlotNo() == null) {
+      result.put("success", false);
+      result.put("error", "날짜와 시간을 선택해주세요.");
+      return result;
     }
+
+    // 3) 비즈니스 검증 (서비스에 위임)
+    // validateReserve 반환 규칙:
+    //   null    → 통과 , 문자열   → 실패 (문자열이 에러 메시지)
+    String error = reserveService.validateReserve(dto);
+    if (error != null) {
+      result.put("success", false);
+      result.put("error", error);
+      return result;
+    }
+
+    // 4) 저장
+    // memId / reserveStatus 는 서버가 강제 (사용자 조작 방지)
+    dto.setMemId(login.getMemId());
+    dto.setReserveStatus("0");       // '0' = 예약접수
+    reserveService.saveReserve(dto);
+
+    // 5) 성공 응답
+    // JS가 이 redirect 값을 받아 완료 페이지로 이동.
+    result.put("success", true);
+    result.put("redirect", "/reserve/complete-page");
+    return result;
   }
 
-  //예약 완료
+  // completeReserve 가 성공하면 JS가 이 URL로 이동
+  // GET이 없으면 완료 화면 이동 시 404가 뜸
+  // (redirect 값이 "/reserve/complete-page")
   @GetMapping("/complete-page")
   public String completePage() {
     return "pages/reserve/reserve_complete";
   }
 
-  //예약 조회
-  @GetMapping("/list")
-  public String reserveList(HttpServletRequest request, Model model){
-    HttpSession session = request.getSession();
-    MemberDTO loginInfo = (MemberDTO) session.getAttribute("loginInfo");
-    if( loginInfo != null ) {
-      model.addAttribute("reserves", reserveService.getReservesByMemId(loginInfo.getMemId()));
+  // [API] 예약 취소 (AJAX)
+  //   성공        : { "success": true,  "message": "예약이 취소되었습니다." }
+  //   로그인 실패 : { "success": false, "redirect": "/member/login-form" }
+  //   검증 실패   : { "success": false, "error": "취소할 수 없는 예약입니다." }
+  @PostMapping("/cancel")
+  @ResponseBody
+  public Map<String, Object> cancelReserve(@RequestParam("reserveNo") Long reserveNo,
+                                           HttpSession session) {
+
+    Map<String, Object> result = new HashMap<>();
+
+    // 1) 로그인 체크
+    MemberDTO login = (MemberDTO) session.getAttribute("loginInfo");
+    if (login == null) {
+      result.put("success", false);
+      result.put("redirect", "/member/login-form");
+      return result;
     }
+
+    // 2) 예약 조회 (존재 여부 + 본인 확인용)
+    ReserveDTO reserve = reserveService.getReserveByNo(reserveNo);
+    if (reserve == null) {
+      result.put("success", false);
+      result.put("error", "예약을 찾을 수 없습니다.");
+      return result;
+    }
+
+    // 3) 본인 예약인지 확인
+    if (!login.getMemId().equals(reserve.getMemId())) {
+      result.put("success", false);
+      result.put("error", "본인의 예약만 취소할 수 있습니다.");
+      return result;
+    }
+
+    // 4) 취소 가능한 상태인지 확인 ('0'/'1'만 취소 가능)
+    String status = reserve.getReserveStatus();
+    if (!"0".equals(status) && !"1".equals(status)) {
+      result.put("success", false);
+      result.put("error", "현재 상태에서는 취소할 수 없습니다.");
+      return result;
+    }
+
+    // 5) 상태를 'C'(취소)로 변경
+    ReserveDTO dto = new ReserveDTO();
+    dto.setReserveNo(reserveNo);
+    dto.setReserveStatus("C");
+    reserveService.updateReserveStatus(dto);
+
+    // 6) 성공
+    result.put("success", true);
+    result.put("message", "예약이 취소되었습니다.");
+    return result;
+  }
+
+
+
+
+
+  @GetMapping("/list")
+  public String reserveList(HttpSession session, Model model) {
+
+    // 1) 로그인 체크
+    MemberDTO login = (MemberDTO) session.getAttribute("loginInfo");
+    if (login == null) {
+      return "redirect:/member/login-form";
+    }
+
+    // 2) 본인 예약만 조회 (최신순 정렬은 Mapper의 ORDER BY)
+    String memId = login.getMemId();
+    List<ReserveDTO> reserves = reserveService.getReservesByMemId(memId);
+
+    // 3) 화면에 전달 → reserve_list.html의 ${reserves}
+    model.addAttribute("reserves", reserves);
 
     return "pages/reserve/reserve_list";
   }
 
 
 }
+

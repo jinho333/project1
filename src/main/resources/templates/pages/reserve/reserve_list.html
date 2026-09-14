@@ -3,109 +3,148 @@
   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
   layout:decorate="~{layouts/user_layout}">
 
-<!--이 곳에 link태그로 css파일을 연결하는 코드 작성-->
 <th:block layout:fragment="content_css">
   <link rel="stylesheet" href="/css/pages/reserve/reserve_list.css">
 </th:block>
 
-<!--아래 block에 html 코드 작성-->
 <th:block layout:fragment="content">
   <div class="mypage">
-
-    <!-- 좌측 : 마이페이지 사이드 -->
-    <aside class="my-side">
-      <div class="card card-lg my-side-inner">
-        <div class="my-profile">
-          <img src="https://placehold.co/100x100/e2e8f0/64748b?text=U">
-          <div>
-            <h2>김고객</h2>
-            <p>user@asfast.com</p>
-          </div>
-        </div>
-
-        <p class="section-label">나의 활동</p>
-        <ul class="side-menu">
-          <li><a class="active" href="/reserve/list"><i class="bi bi-list-check"></i> 예약 내역 조회</a></li>
-          <li><a href="/review/list"><i class="bi bi-star"></i> 작성한 리뷰</a></li>
-        </ul>
-
-        <p class="section-label">계정 설정</p>
-        <ul class="side-menu">
-          <li><a href="#"><i class="bi bi-person"></i> 회원 정보 수정</a></li>
-          <li><a href="#"><i class="bi bi-geo-alt-fill"></i> 주소지 관리</a></li>
-        </ul>
-      </div>
-    </aside>
 
     <!-- 우측 : 리스트 본문 -->
     <div class="my-main">
       <h1>예약 내역 조회</h1>
 
       <!-- 탭 -->
-      <ul class="tab-list">
-        <li class="tab-active">
-          진행 중인 예약 <span class="tab-count">1</span>
+      <ul class="tab-list" id="tabList">
+        <li class="tab-active" data-tab="active" onclick="filterTab('active', this)">
+          진행 중인 예약
         </li>
-        <li>
-          완료된 내역 <span class="tab-count gray">3</span>
+        <li data-tab="done" onclick="filterTab('done', this)">
+          완료된 내역
         </li>
-        <li>취소 내역</li>
+        <li data-tab="cancel" onclick="filterTab('cancel', this)">
+          취소 내역
+        </li>
       </ul>
 
       <!-- 예약 카드 리스트 -->
-      <div class="reserve-list">
+      <div class="reserve-list" id="reserveList">
 
-        <!-- 카드 1 : 진행 중 (이동 중) -->
-        <div class="reserve-item card card-lg" onclick="location.href='/reserve/detail/98274'">
-          <span class="line-orange"></span>
-          <div class="reserve-item__body">
-            <div class="product-icon-lg"><i class="bi bi-snow2"></i></div>
-            <div class="reserve-item__info">
-              <div class="tag-row">
-                <span class="badge badge-orange animate-pulse">
-                  <i class="bi bi-truck"></i> 기사 이동 중
-                </span>
-                <span class="time-chip">오늘 15:30 예정</span>
+        <!-- 예약이 아예 없는 경우 -->
+        <div th:if="${#lists.isEmpty(reserves)}" class="empty-state">
+          <i class="bi bi-inbox"></i>
+          <p>아직 예약 내역이 없습니다.</p>
+          <a href="/reserve/form" class="btn btn-primary btn-md">A/S 예약하기</a>
+        </div>
+
+        <!-- 예약 카드 반복 (카드 클릭 이동 없음) -->
+        <div th:each="r : ${reserves}"
+             th:data-status="${r.reserveStatus}"
+             class="reserve-item card card-lg">
+
+          <!-- 상태별 좌측 강조 라인 -->
+          <span th:if="${r.reserveStatus == '9'}" class="line-blue"></span>
+          <span th:if="${r.reserveStatus == 'C'}" class="line-gray"></span>
+          <span th:if="${r.reserveStatus == '0' or r.reserveStatus == '1'}" class="line-blue"></span>
+
+          <!-- 카드 상단: 아이콘 + 정보 -->
+          <div class="reserve-item__main">
+            <div class="reserve-item__body">
+              <div class="product-icon-lg"
+                   th:classappend="${r.reserveStatus == '9' or r.reserveStatus == 'C' ? 'gray' : ''}">
+                <i class="bi"
+                   th:classappend="${r.productType == '난방' ? 'bi-thermometer-high' : 'bi-snow2'}"></i>
               </div>
-              <h3>벽걸이 에어컨 수리</h3>
-              <p class="addr"><i class="bi bi-geo-alt-fill"></i> 서울 강남구 테헤란로 123...</p>
-            </div>
-          </div>
-          <div class="reserve-item__driver">
-            <div class="driver-info">
-              <img src="https://placehold.co/100x100/e2e8f0/64748b?text=KIM">
-              <div>
-                <p class="name">김철수 엔지니어</p>
-                <p class="rate">
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-                  <i class="bi bi-star-fill"></i>
+
+              <div class="reserve-item__info">
+                <div class="tag-row">
+                  <th:block th:switch="${r.reserveStatus}">
+                    <span th:case="'0'" class="badge badge-primary">
+                      <i class="bi bi-hourglass-split"></i> 예약 접수
+                    </span>
+                    <span th:case="'1'" class="badge badge-primary">
+                      <i class="bi bi-person-check"></i> 기사 배정 완료
+                    </span>
+                    <span th:case="'9'" class="badge badge-green">
+                      <i class="bi bi-check-lg"></i> 수리 완료
+                    </span>
+                    <span th:case="'C'" class="badge badge-gray">
+                      <i class="bi bi-x-lg"></i> 취소됨
+                    </span>
+                  </th:block>
+
+                  <span class="time-chip"
+                        th:text="|${#temporals.format(r.reserveDate, 'M월 d일 (E)')} ${r.slotLabel}|">
+                  </span>
+                </div>
+
+                <h3 th:text="${r.modelName}">삼성 무풍 에어컨</h3>
+                <p class="addr">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span th:text="${r.categoryName} + ' · ' + ${r.visitAddr} + ' ' + ${r.visitAddrDetail}"></span>
                 </p>
               </div>
             </div>
-            <span class="arrow-icon"><i class="bi bi-chevron-right"></i></span>
           </div>
+
+          <!-- 하단: 상태 정보(좌) + 버튼(우) -->
+          <div class="reserve-bottom">
+
+            <div class="bottom-left">
+              <th:block th:if="${r.reserveStatus == '9'}">
+                <div class="done-info">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span th:text="${#temporals.format(r.reserveDate, 'yyyy년 M월 d일')} + ' 완료'">
+                    2026년 8월 20일 완료
+                  </span>
+                </div>
+              </th:block>
+              <th:block th:if="${r.reserveStatus == 'C'}">
+                <div class="cancel-info">
+                  <i class="bi bi-x-circle"></i>
+                  <span>취소된 예약입니다.</span>
+                </div>
+              </th:block>
+            </div>
+
+            <div class="bottom-right">
+              <!-- 예약 취소 (진행 중 상태만) -->
+              <button type="button"
+                      class="btn btn-secondary btn-sm"
+                      th:if="${r.reserveStatus == '0' or r.reserveStatus == '1'}"
+                      th:onclick="|cancelReserve(${r.reserveNo})|">
+                <i class="bi bi-x-circle"></i> 예약 취소
+              </button>
+              <!-- 리뷰 작성 (완료 탭만) -->
+              <button type="button"
+                      class="btn btn-secondary btn-sm"
+                      th:if="${r.reserveStatus == '9'}"
+                      onclick="location.href='/review/write';">
+                <i class="bi bi-star"></i> 리뷰 작성
+              </button>
+
+              <!-- 상세정보 토글 -->
+              <button type="button"
+                      class="btn btn-secondary btn-sm btn-symptom"
+                      onclick="toggleSymptom(this);">
+                <i class="bi bi-chevron-down"></i> 상세정보
+              </button>
+            </div>
+
+          </div>
+
+          <!-- 상세정보 펼침 영역 (초기 숨김) -->
+          <div class="reserve-symptom-panel">
+            <span class="detail-label">상세 정보</span>
+            <textarea class="symptom-textarea" readonly th:text="${r.symptom}"></textarea>
+          </div>
+
         </div>
 
-        <!-- 카드 2 : 기사 배정 완료 -->
-        <div class="reserve-item card card-lg" onclick="location.href='/reserve/detail/98275'">
-          <span class="line-blue"></span>
-          <div class="reserve-item__body">
-            <div class="product-icon-lg gray"><i class="bi bi-thermometer-high"></i></div>
-            <div class="reserve-item__info">
-              <div class="tag-row">
-                <span class="badge badge-primary">
-                  <i class="bi bi-person-check"></i> 기사 배정 완료
-                </span>
-                <span class="time-chip">9월 12일 (토) 14:00 예정</span>
-              </div>
-              <h3>가스 보일러 점검</h3>
-              <p class="addr"><i class="bi bi-geo-alt-fill"></i> 서울 강남구 테헤란로 123...</p>
-            </div>
-          </div>
-          <div class="reserve-item__driver only-arrow">
-            <span class="arrow-icon"><i class="bi bi-chevron-right"></i></span>
-          </div>
+        <!-- 탭 필터 결과 없음 안내 (JS) -->
+        <div id="tabEmpty" class="empty-state" style="display:none;">
+          <i class="bi bi-inbox"></i>
+          <p>이 탭에 해당하는 예약이 없습니다.</p>
         </div>
 
       </div>
@@ -113,7 +152,7 @@
   </div>
 </th:block>
 
-<!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
 <th:block layout:fragment="content_js">
+  <script src="/js/pages/reserve/reserve_list.js"></script>
 </th:block>
 </html>

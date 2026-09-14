@@ -5,10 +5,12 @@
 
 <!-- CSS -->
 <th:block layout:fragment="content_css">
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/skeleton.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/themes/monarch/theme.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/themes/monarch/palettes/blue.css" rel="stylesheet">
   <link rel="stylesheet" href="/css/pages/reserve/reserve_form.css">
   <link rel="stylesheet" href="/css/pages/reserve/reserve_time.css">
-  <!-- FullCalendar 6.1.15 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
 </th:block>
 
 <!-- 본문 -->
@@ -49,7 +51,14 @@
     <div class="reserve-main">
       <form action="/reserve/complete" method="post" id="reserve-time-form">
 
-        <!-- JS가 채워 넣을 hidden input (선택한 날짜 + 시간) -->
+        <!-- 1단계에서 넘어온 값 (hidden) -->
+        <input type="hidden" name="modelName" th:value="${reserveDTO.modelName}">
+        <input type="hidden" name="symptom" th:value="${reserveDTO.symptom}">
+        <input type="hidden" name="categoryNo" th:value="${reserveDTO.categoryNo}">
+        <input type="hidden" name="visitAddr" th:value="${reserveDTO.visitAddr}">
+        <input type="hidden" name="visitAddrDetail" th:value="${reserveDTO.visitAddrDetail}">
+
+        <!-- 방문 날짜 (JS가 채움) / 시간은 슬롯 라디오(slotNo)로 별도 전송 -->
         <input type="hidden" name="reserveDate" id="reserveDateInput">
 
         <div class="card card-lg time-wrap">
@@ -57,7 +66,6 @@
           <!-- 캘린더 영역 -->
           <div class="calendar-area">
             <h3>방문 날짜를 선택해주세요</h3>
-            <!-- FullCalendar가 렌더링될 div -->
             <div id="calendar"></div>
           </div>
 
@@ -68,24 +76,26 @@
               <div>
                 <!-- JS가 날짜를 동적으로 갱신 -->
                 <h3 id="slotDateTitle">날짜를 선택해주세요</h3>
-                <p>기사님이 방문하실 정확한 시간을 선택해주세요.</p>
-              </div>
-              <div class="slot-legend">
-                <span><span class="dot dot-avail"></span>선택 가능</span>
-                <span><span class="dot dot-close"></span>마감</span>
+                <p>방문 희망 날짜를 선택해주세요. 당일 예약은 불가합니다.</p>
               </div>
             </div>
 
-            <!-- JS가 이 안에 슬롯을 동적으로 생성 -->
+            <!-- JS가 슬롯을 동적으로 생성 -->
             <div class="slot-grid" id="slotGrid"></div>
 
+            <!-- JS가 넣는 검증 메시지 (슬롯 미선택 등) -->
             <p id="timeP" class="valigate-p invalid"></p>
+
+            <!-- AJAX 응답의 error 메시지를 JS가 여기에 넣음 -->
+            <p id="completeErrorP" class="valigate-p invalid"></p>
 
             <!-- 하단 버튼 -->
             <div class="form-footer">
+
               <a href="/reserve/form" class="btn btn-ghost btn-md">
                 <i class="bi bi-arrow-left"></i> 이전 단계
               </a>
+
               <button type="button" class="btn btn-primary btn-lg" onclick="goComplete()">
                 예약 확정하기 <i class="bi bi-check-lg"></i>
               </button>
@@ -98,10 +108,13 @@
   </div>
 </th:block>
 
-<!-- JavaScript -->
 <th:block layout:fragment="content_js">
-  <!-- FullCalendar jS -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+  <!-- FullCalendar JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/all/global.js"></script>
+  <!-- 한국어 로케일 -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/locales-all.global.min.js"></script>
+  <!-- 테마 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.1.0/themes/monarch/global.js"></script>
   <!-- 커스텀 JS -->
   <script src="/js/pages/reserve/reserve_time.js"></script>
 </th:block>

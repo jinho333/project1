@@ -1,81 +1,20 @@
+/* =========================================================
+   페이지 레이아웃
+   ========================================================= */
 .mypage {
-  display: flex;
-  gap: 40px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
-/* 좌측 사이드 */
-.my-side {
-  width: 280px;
-  flex-shrink: 0;
-}
-
-.my-side-inner {
-  padding: 24px !important;
-  position: sticky;
-  top: 120px;
-}
-
-.my-profile {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding-bottom: 24px;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--color-border-light);
-}
-.my-profile img { width: 60px; height: 60px; border-radius: var(--radius-pill); }
-.my-profile h2 { font-size: 1.25rem; }
-.my-profile p { font-size: 0.85rem; color: var(--color-text-muted); }
-
-.section-label {
-  padding: 0 16px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-text-subtle);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin: 16px 0 8px;
-}
-
-.side-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 16px;
-}
-
-.side-menu a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  color: var(--color-text-muted);
-  transition: var(--transition-base);
-}
-.side-menu a i { color: var(--color-text-subtle); font-size: 1.1rem; }
-.side-menu a:hover {
-  background: var(--color-surface-alt);
-  color: var(--color-text);
-}
-.side-menu a.active {
-  background: var(--color-primary-bg);
-  color: var(--color-primary);
-  font-weight: 700;
-}
-.side-menu a.active i { color: var(--color-primary); }
-
-/* 우측 본문 */
-.my-main { flex: 1; min-width: 0; }
+.my-main { min-width: 0; }
 .my-main > h1 {
   font-size: 1.875rem;
   margin-bottom: 32px;
 }
 
-/* 탭 */
+/* =========================================================
+   탭
+   ========================================================= */
 .tab-list {
   display: flex;
   gap: 32px;
@@ -94,9 +33,7 @@
   align-items: center;
   gap: 8px;
 }
-
 .tab-list li:hover { color: var(--color-text); }
-
 .tab-list li.tab-active {
   color: var(--color-primary);
   font-weight: 700;
@@ -104,17 +41,9 @@
   margin-bottom: -1px;
 }
 
-.tab-count {
-  background: var(--color-primary);
-  color: #FFF;
-  font-size: 0.7rem;
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  font-weight: 700;
-}
-.tab-count.gray { background: var(--color-border); color: var(--color-text-muted); }
-
-/* 예약 리스트 */
+/* =========================================================
+   예약 리스트
+   ========================================================= */
 .reserve-list {
   display: flex;
   flex-direction: column;
@@ -124,12 +53,11 @@
 .reserve-item {
   padding: 32px !important;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
+  flex-direction: column;
+  align-items: stretch;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
+  cursor: default;
   transition: var(--transition-base);
 }
 
@@ -138,13 +66,25 @@
   box-shadow: var(--shadow-md);
 }
 
-.line-orange, .line-blue {
+/* 좌측 강조 라인 */
+.line-blue, .line-gray {
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 8px;
 }
-.line-orange { background: var(--color-accent-orange); }
 .line-blue { background: var(--color-primary-light); }
+.line-gray { background: var(--color-border); }
+
+/* =========================================================
+   카드 상단: 아이콘 + 정보
+   ========================================================= */
+.reserve-item__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  width: 100%;
+}
 
 .reserve-item__body {
   display: flex;
@@ -179,7 +119,6 @@
   align-items: center;
   margin-bottom: 8px;
 }
-
 .tag-row .badge {
   padding: 6px 12px;
   font-size: 0.85rem;
@@ -213,36 +152,113 @@
 }
 .reserve-item__info .addr i { color: var(--color-text-subtle); }
 
-/* 우측 기사 정보 */
-.reserve-item__driver {
+/* =========================================================
+   카드 하단 (좌: 상태 정보 / 우: 버튼)
+   ========================================================= */
+.reserve-bottom {
+  width: 100%;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-light);
+  padding-left: 16px;
+  padding-right: 16px;
+
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 32px;
+  gap: 16px;
+}
+
+.bottom-right {
+  display: flex;
+  gap: 8px;
   flex-shrink: 0;
 }
 
-.reserve-item__driver.only-arrow { gap: 0; }
-
-.driver-info { display: flex; align-items: center; gap: 16px; }
-.driver-info img { width: 48px; height: 48px; border-radius: var(--radius-pill); border: 1px solid var(--color-border); }
-.driver-info .name { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
-.driver-info .rate { color: var(--color-accent-yellow); font-size: 0.75rem; }
-
-.arrow-icon {
-  width: 56px;
-  height: 56px;
-  background: var(--color-surface-alt);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  display: flex;
+.done-info {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: var(--color-text-subtle);
-  transition: var(--transition-base);
+  gap: 8px;
+  color: var(--color-accent-green);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.done-info i { font-size: 1.1rem; }
+
+.cancel-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+.cancel-info i { color: var(--color-text-subtle); font-size: 1.1rem; }
+
+/* =========================================================
+   증상 펼침 영역
+   ========================================================= */
+.reserve-symptom-panel {
+  display: none;
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 20px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-top: 1px solid var(--color-border-light);
+}
+.reserve-symptom-panel.open {
+  display: block;
 }
 
-.reserve-item:hover .arrow-icon {
-  background: var(--color-primary);
-  color: #FFF;
-  border-color: var(--color-primary);
+.detail-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+/* =========================================================
+   증상 텍스트박스 (읽기 전용, 스크롤)
+   ========================================================= */
+.symptom-textarea {
+  width: 100%;
+  min-height: 120px;
+  max-height: 320px;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-surface-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  resize: none;
+  overflow-y: auto;
+  outline: none;
+}
+.symptom-textarea:focus {
+  border-color: var(--color-primary-soft);
+}
+
+/* =========================================================
+   빈 상태 안내
+   ========================================================= */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--color-text-muted);
+}
+.empty-state i {
+  font-size: 3rem;
+  color: var(--color-text-subtle);
+  display: block;
+  margin-bottom: 16px;
+}
+.empty-state p {
+  font-size: 1.05rem;
+  margin-bottom: 24px;
 }
