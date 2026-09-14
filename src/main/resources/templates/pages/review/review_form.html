@@ -10,21 +10,21 @@
 
 <!--아래 block에 html 코드 작성-->
 <th:block layout:fragment="content">
-  <!-- 리뷰 작성 트리거 (예시) -->
+  <!-- 리뷰 작성 트리거 (예시)
   <div style="text-align:center; padding: 60px 0;">
     <button type="button" class="btn btn-primary btn-lg" onclick="openModal('#review-modal')">
       서비스 리뷰 작성하기
     </button>
-  </div>
+  </div> -->
 
   <!-- 서비스 리뷰 작성 모달 -->
-  <div class="modal-overlay active" id="review-modal">
-    <div class="modal-box modal-large review-modal">
+  <!-- <div class="modal-overlay active" id="review-modal"> -->
+    <div class="review-div">
       <div class="modal-header">
         <h3>서비스 만족도 평가</h3>
-        <span class="close-x" onclick="closeModal('#review-modal')">
+        <!-- <span class="close-x" onclick="closeModal('#review-modal')">
           <i class="bi bi-x-lg"></i>
-        </span>
+        </span> -->
       </div>
       <div class="modal-content">
         <form action="/review/submit" method="post" id="review-form">
@@ -34,7 +34,7 @@
             <div class="clap-icon"><i class="bi bi-hand-thumbs-up-fill"></i></div>
             <h2>수리 서비스는 어떠셨나요?</h2>
             <p class="lead">
-              <span class="strong">김철수 엔지니어</span>님의 서비스에 대해 별점을 남겨주세요.
+              이번 서비스에 대해 별점을 남겨주세요.
             </p>
           </div>
 
@@ -48,7 +48,7 @@
           </div>
 
           <!-- 좋았던 점 -->
-          <div class="review-tags">
+          <!-- <div class="review-tags">
             <h3>어떤 점이 좋았나요? <span class="multi-tag">다중 선택 가능</span></h3>
             <div class="tag-chips">
               <label class="chip">
@@ -72,7 +72,7 @@
                 <span><i class="bi bi-currency-exchange"></i> 합리적인 수리 비용</span>
               </label>
             </div>
-          </div>
+          </div> -->
 
           <!-- 상세 리뷰 -->
           <div class="review-text">
@@ -91,7 +91,7 @@
         </form>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 </th:block>
 
 <!--이 곳에 script태그로 js파일을 연결하는 코드 작성-->
