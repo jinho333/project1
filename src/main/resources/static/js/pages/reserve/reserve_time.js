@@ -1,81 +1,37 @@
 // reserve_time.js
 
-// 초기화 (FullCalendar + 슬롯 그리드)
+// 페이지 로드 시 실행 - 캘린더 초기화
 document.addEventListener("DOMContentLoaded", function () {
   const calendarEl = document.getElementById("calendar");
+  if (!calendarEl) return;
 
-  if (!calendarEl) {
-    console.error("❌ #calendar 요소를 찾을 수 없습니다.");
-    return;
-  }
-
-  // 기본 선택 날짜 = 내일 (당일 예약 불가)
+  // 기본 선택 날짜 = 내일 (당일 예약 불가 정책)
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowStr = formatDate(tomorrow);
-
-  let selectedDate = tomorrowStr;
 
   // FullCalendar 초기화
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
     locale: "ko",
-    selectable: true,
-
-    // 오늘 이전 날짜는 선택 불가 (당일 예약 차단)
-    validRange: {
-      start: tomorrowStr,
-    },
-
-    // 상단 툴바: [<] 제목 [>]
-    headerToolbar: {
-      start: "prev",
-      center: "title",
-      end: "next",
-    },
-
-    // 날짜 셀 클릭 시 실행
-    dateClick: (info) => {
-      selectedDate = info.dateStr;
-      console.log("[날짜 선택]", selectedDate);
-      applySelectedDate(selectedDate);
-    },
+    validRange: { start: tomorrowStr }, // 오늘 이전 선택 불가
+    headerToolbar: { start: "prev", center: "title", end: "next" },
+    dateClick: (info) => applySelectedDate(info.dateStr),
   });
-
   calendar.render();
-  console.log("캘린더 렌더링 완료");
-
-  // 슬롯 선택 로그 (이벤트 위임)
-  // - 슬롯이 서버 응답마다 새로 생성되므로 위임 방식 사용
-  const slotGrid = document.getElementById("slotGrid");
-  if (slotGrid) {
-    slotGrid.addEventListener("change", (event) => {
-      const input = event.target;
-      if (input.name === "slotNo") {
-        const labelEl = input.parentElement?.querySelector(".slot");
-        const labelText = labelEl ? labelEl.textContent : "";
-        console.log(
-          "[슬롯 선택] slotNo =",
-          input.value,
-          "/ label =",
-          labelText,
-        );
-      }
-    });
-  }
 
   // 페이지 진입 시 내일 날짜로 초기화
-  applySelectedDate(selectedDate);
+  applySelectedDate(tomorrowStr);
 });
 
-// 선택된 날짜를 화면 전체에 반영
+// 선택된 날짜를 화면에 반영 (hidden input + 헤더 + 슬롯 조회)
 const applySelectedDate = (dateStr) => {
   document.getElementById("reserveDateInput").value = dateStr;
   updateSlotHeader(dateStr);
   loadAvailableTimes(dateStr);
 };
 
-// Date → "yyyy-MM-dd" 문자열 변환
+// Date 객체를 "yyyy-MM-dd" 문자열로 변환
 const formatDate = (date) => {
   const yyyy = date.getFullYear();
   const mm = String(date.getMonth() + 1).padStart(2, "0");
@@ -83,52 +39,44 @@ const formatDate = (date) => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
-// 슬롯 헤더 날짜 표시 (예: "9월 10일 (목)")
+// 슬롯 헤더에 날짜 표시 (예: "9월 10일 (목)")
 const updateSlotHeader = (dateStr) => {
   const headerEl = document.getElementById("slotDateTitle");
   if (!headerEl) return;
 
   const date = new Date(dateStr);
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
-  const weekday = weekdays[date.getDay()];
-
-  headerEl.innerHTML = `${month}월 ${day}일 (${weekday})`;
+  headerEl.innerHTML = `${date.getMonth() + 1}월 ${date.getDate()}일 (${weekdays[date.getDay()]})`;
 };
 
-// 서버에서 예약 가능 시간 조회
+// 서버에서 해당 날짜의 예약 가능 시간 조회
 const loadAvailableTimes = async (date) => {
   try {
-    const response = await fetch(`/reserve/available-times?date=${date}`);
-    const data = await response.json();
-    renderSlotGrid(data.slots, data.reservedSlots);
+    const response = await axios.get("/reserve/available-times", {
+      params: { date: date },
+    });
+    renderSlotGrid(response.data.slots, response.data.reservedSlots);
   } catch (error) {
     console.error("예약 가능 시간 조회 실패:", error);
   }
 };
 
-// 슬롯 그리드 렌더링
-// - 예약된 슬롯 → .slot--disabled (클릭 불가)
-// - 예약 가능 → <label><input type="radio" name="slotNo"></label>
+// 슬롯 그리드 렌더링 (마감 슬롯은 비활성, 나머지는 라디오 버튼)
 const renderSlotGrid = (slots, reservedSlots) => {
   const slotGrid = document.getElementById("slotGrid");
   if (!slotGrid) return;
 
-  // 기존 슬롯 초기화
   slotGrid.innerHTML = "";
 
   slots.forEach((slot) => {
-    const isReserved = reservedSlots.includes(slot.slotNo);
-
-    if (isReserved) {
-      // 예약 마감 슬롯
+    if (reservedSlots.includes(slot.slotNo)) {
+      // 예약 마감된 슬롯 (클릭 불가)
       const div = document.createElement("div");
       div.className = "slot slot--disabled";
       div.textContent = slot.slotLabel;
       slotGrid.appendChild(div);
     } else {
-      // 선택 가능 슬롯
+      // 선택 가능한 슬롯 (라디오 버튼)
       const label = document.createElement("label");
       label.className = "slot-label";
 
@@ -149,27 +97,40 @@ const renderSlotGrid = (slots, reservedSlots) => {
   });
 };
 
-// "예약 확정하기" 클릭 시 실행
-// - 방문 날짜(hidden) + 슬롯 번호(radio) 검증 후 폼 전송
-const goComplete = () => {
-  // 1) 날짜 검증
+// "예약 확정하기" 클릭 시 실행 (AJAX)
+const goComplete = async () => {
+  // 날짜 검증
   const reserveDate = document.getElementById("reserveDateInput").value;
   if (!reserveDate) {
     alert("방문 날짜를 먼저 선택해주세요.");
     return;
   }
 
-  // 2) 슬롯 검증
+  // 슬롯 검증
   const slotInput = document.querySelector('input[name="slotNo"]:checked');
   if (!slotInput) {
     document.getElementById("timeP").textContent = "방문 시간을 선택해주세요.";
     return;
   }
 
-  console.log("[예약 확정] 데이터 전송", {
-    reserveDate: reserveDate,
-    slotNo: slotInput.value,
-  });
+  // 이전 에러 메시지 초기화
+  document.getElementById("completeErrorP").textContent = "";
 
-  document.getElementById("reserve-time-form").submit();
+  // 서버에 전송 후 결과에 따라 분기
+  try {
+    const formData = new FormData(document.getElementById("reserve-time-form"));
+    const response = await axios.post("/reserve/complete", formData);
+    const data = response.data;
+
+    if (data.success || data.redirect) {
+      // 성공 또는 로그인 실패 → 서버가 알려준 URL로 이동
+      location.href = data.redirect;
+    } else {
+      // 검증 실패 → 페이지 리로드 없이 에러 메시지만 표시
+      document.getElementById("completeErrorP").textContent = data.error;
+    }
+  } catch (err) {
+    console.error("예약 확정 실패:", err);
+    alert("예약 처리 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+  }
 };
