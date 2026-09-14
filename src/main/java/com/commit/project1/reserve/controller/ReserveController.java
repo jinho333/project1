@@ -27,8 +27,7 @@ public class ReserveController {
   //예약 정보 입력 관련 컨트롤러
   @GetMapping("/form")
   public String reserveForm(HttpSession session, Model model){
-
-    //로그인한 회원 주소 (세션에서 아이디를 찾자!)
+    //로그인한 회원 주소
    MemberDTO member = (MemberDTO) session.getAttribute("loginInfo");
    if (member != null){
      String memId = member.getMemId();
@@ -44,7 +43,6 @@ public class ReserveController {
     System.out.println(reserveDTO);
     return "pages/reserve/reserve_time";
   }
-
 
 
   //  특정 날짜의 예약 가능 시간을 JSON으로 반환하는 API

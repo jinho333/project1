@@ -57,6 +57,8 @@ public class ReserveService {
     return reserveMapper.selectReserves();
   }
 
-
-
+  //예약페이지 카테고리 조회
+   public List<CategoryDTO> selectCategory(String productType){
+    return reserveMapper.selectCategory(productType);
+   }
 }

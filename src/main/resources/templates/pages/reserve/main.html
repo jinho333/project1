@@ -25,9 +25,14 @@
         복잡한 전화 없이 터치 몇 번으로 간편하게 A/S를 예약하세요.
       </p>
       <div class="hero-btn-div">
-        <a href="/reserve/form" class="btn btn-primary btn-lg">
-          지금 A/S 예약하기 <i class="bi bi-arrow-right"></i>
-        </a>
+        <th:block th:if="${session.loginInfo != null}">
+          <a th:href="${session.loginInfo == null ? '/member/login-form' : '/reserve/form'}" class="btn btn-primary btn-lg" >지금 A/S 예약하기<i class="bi bi-arrow-right"></i></a>
+        </th:block>
+        <th:block th:if="${session.loginInfo == null}">
+          <a href="/member/login-form" class="btn btn-primary btn-lg">
+            지금 A/S 예약하기 <i class="bi bi-arrow-right"></i>
+          </a>
+        </th:block>
       </div>
     </div>
 
@@ -55,20 +60,18 @@
             </div>
             <div>
               <span class="badge badge-orange animate-pulse">이동 중</span>
-              <p class="product-name" th:text="${reserves[0].categoryNo}"></p>
-            </div>
-          </div>
-          <div class="driver-box">
-            <div class="driver-info">
-              <img src="https://placehold.co/100x100/e2e8f0/64748b?text=D">
-              <div>
-                <p class="name">김철수 기사님</p>
-                <p class="desc">도착까지 약 15분 남음</p>
+              <div class="reserve-text">
+                <p class="product-name"><a href="/reserve/list">[[${reserves[0].modelName}]]</a></p>
+                <p class="product-name reserve-text">예약 진행 중</p>
               </div>
             </div>
-            <button type="button" class="btn-icon"><i class="bi bi-telephone-fill"></i></button>
           </div>
         </div>
+      </th:block>
+      <th:block th:if="${session.loginInfo == null}">
+        <!-- <div class="card card-lg reserve-card"> -->
+          <img src="img/main-img.jpg" alt="출처 : https://www.pexels.com/ko-kr/photo/5463575/" class="profile-img">
+        <!-- </div> -->
       </th:block>
     </div>
   </div>

@@ -1,3 +1,78 @@
+//예약 첫 페이지 (냉방으로 카테고리 설정)
+window.onload = () => {
+  goProduct('냉방', document.querySelector('#coolbtn'));
+}
+
+//냉,난방 버튼 클릭 시 실행 함수
+const goProduct = (productType, btn) => {
+  //액티브 클래스 삭제
+  document.querySelector('#coolbtn').classList.remove('active');
+  document.querySelector('#heatbtn').classList.remove('active');
+
+  console.log(productType);
+  //this 버튼active 활성화
+  btn.classList.add('active');
+
+  if(productType === '냉방'){
+    axios
+    .get('/reserve-api/productType?productType=냉방')
+    .then((response) => {
+      //데이터로 화면 그리기!
+      iconGrid(response.data)
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log('카테고리 조회 실패');
+    });
+  }
+  else{
+    axios
+    .get('/reserve-api/productType?productType=난방')
+    .then((response) => {
+      iconGrid(response.data);
+      
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log('카테고리 조회 실패');
+    });
+  }
+}
+
+//아이콘
+const getIcon = (categoryName) => {
+  if(categoryName === '에어컨') {return 'bi-snow2'};
+  if(categoryName === '실외기') {return 'bi-fan'};
+  if(categoryName === '시스템에어컨') {return 'bi-thermometer-snow'};
+  if(categoryName === '보일러') {return 'bi-fire'};
+  if(categoryName === '온수기') {return 'bi-droplet-fill'};
+  if(categoryName === '히터') {return 'bi-thermometer-sun'};
+  return 'bi bi-three-dots';
+}
+
+//화면 함수
+const iconGrid = (categoryList) => {
+  const product_grid = document.querySelector('#product-grid');
+  product_grid.innerHTML = '';
+
+  for(let i = 0; i < categoryList.length; i++){
+    const c = categoryList[i];
+    const icon = getIcon(c.categoryName);
+    const checked = (i === 0) ? 'checked' : '';
+
+    product_grid.innerHTML += `
+      <label class="radio-card">
+        <input type="radio" name="categoryNo" value="${c.categoryNo}" class="radio-card__input" ${checked}>
+          <div class="radio-card__body product-card">
+            <i class="bi ${icon}"></i>
+            <span>${c.categoryName}</span>
+          </div>
+      </label>
+    `
+  }
+
+}
+
 //예약 1단계 유효성 검사
 const reserveFormValigate = () => {
   const product = document.querySelector('input[name="categoryNo"]:checked');
@@ -47,6 +122,3 @@ const searchPostCode = () => {
     }
   }).open();
 }
-
-//<p class="addr-main" th:text="${memberAddr.addr}" id="newAddr" name="addr"></p>
-//<p class="addr-sub" th:text="${memberAddr.addrDetail}" id="newAddrDetail"></p>

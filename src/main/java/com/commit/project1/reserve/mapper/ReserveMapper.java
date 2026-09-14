@@ -30,6 +30,9 @@ public interface ReserveMapper {
   //모든 예약 정보 조회
   List<ReserveDTO> selectReserves();
 
+  //예약 페이지 카테고리 조회
+  List<CategoryDTO> selectCategory(String productType);
+
 
 
 

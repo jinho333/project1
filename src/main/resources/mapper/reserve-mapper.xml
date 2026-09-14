@@ -134,5 +134,15 @@
     ORDER BY CATEGORY_NO DESC
   </select>
 
+  <!--예약페이지 / 카테고리 조회-->
+  <select id="selectCategory" resultMap="category">
+    SELECT
+     CATEGORY_NO
+    , CATEGORY_NAME
+    FROM CATEGORY
+    WHERE PRODUCT_TYPE = #{productType}
+    ORDER BY CATEGORY_NO
+  </select>
+
 </mapper>
 
