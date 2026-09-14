@@ -1,6 +1,6 @@
 //리뷰 등록 유효성 검사
 const reviewValigate = () => {
-  const rate = document.querySelector('input[name="rate"]:checked');
+  const rate = document.querySelector('input[name="rating"]:checked');
 
   document.querySelector('#contentP').textContent = '';
 
