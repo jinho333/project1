@@ -43,7 +43,7 @@
       <!-- 카드2 : 진행 중인 예약 -->
       <th:block th:if="${session.loginInfo != null}">
         <div class="card card-lg reserve-card">
-          <span class="side-line"></span>
+          <span class="side-line" th:classappend="${reserves[0].productType == '냉방'} ? 'product-cool' : ''"></span>
           <div class="reserve-head">
             <div>
               <p class="label">진행 중인 예약</p>
@@ -59,9 +59,9 @@
               <i class="bi bi-snow2"></i>
             </div>
             <div>
-              <span class="badge badge-orange animate-pulse">이동 중</span>
+              <!-- <span class="badge badge-orange animate-pulse">이동 중</span> -->
               <div class="reserve-text">
-                <p class="product-name"><a href="/reserve/list">[[${reserves[0].modelName}]]</a></p>
+                <p class="product-name"><a href="/reserve/list">[[${reserves[0].categoryName}]]</a></p>
                 <p class="product-name reserve-text">예약 진행 중</p>
               </div>
             </div>

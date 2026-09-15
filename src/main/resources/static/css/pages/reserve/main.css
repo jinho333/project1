@@ -131,6 +131,10 @@
   background: var(--color-accent-orange);
 }
 
+.reserve-card .side-line.product-cool{
+  background-color: #2563EB;
+}
+
 .reserve-head {
   display: flex;
   justify-content: space-between;
