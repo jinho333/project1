@@ -4,6 +4,10 @@ window.onload = () => {
 }
 
 //냉,난방 버튼 클릭 시 실행 함수
+// 카테고리 목록을 페이지 로드 시 미리 다 받아두지 않고, 탭을 누를 때마다 axios로 새로 조회한다.
+// 냉방/난방 카테고리를 한 번에 같이 받아서 클라이언트에서 나눠 보여줘도 되지만,
+// 서버(/reserve-api/productType)가 이미 productType별로 나눠서 내려주고 있어서
+// 탭 클릭 시점에 필요한 것만 요청하는 쪽이 코드가 더 단순하다고 판단했다.
 const goProduct = (productType, btn) => {
   //액티브 클래스 삭제
   document.querySelector('#coolbtn').classList.remove('active');
@@ -40,6 +44,8 @@ const goProduct = (productType, btn) => {
 }
 
 //아이콘
+// CATEGORY 테이블에 아이콘 컬럼이 없어서, 카테고리명 문자열을 기준으로 아이콘을 매칭한다.
+// 카테고리 종류가 6개뿐이라 이 정도 하드코딩이 DB 스키마를 바꾸는 것보다 간단하다고 판단했다.
 const getIcon = (categoryName) => {
   if(categoryName === '에어컨') {return 'bi-snow2'};
   if(categoryName === '실외기') {return 'bi-fan'};
@@ -78,6 +84,8 @@ const reserveFormValigate = () => {
   const product = document.querySelector('input[name="categoryNo"]:checked');
   const symptom = document.querySelector('textarea[name="symptom"]').value;
 
+  // 최소 5자: 너무 짧으면("ㅁ" 한 글자 등) 기사가 증상을 파악할 수 없어서 최소한의 정보량을 강제.
+  // 최대 500자: DB 컬럼(SYMPTOM VARCHAR(500))을 넘는 값이 저장 실패로 이어지지 않도록 서버 제약과 맞춤.
   const symptom_regex = /^[a-zA-Z0-9가-힣\s\p{P}]{5,500}$/u;
 
   const p_tags = document.querySelectorAll('.valigate-p');

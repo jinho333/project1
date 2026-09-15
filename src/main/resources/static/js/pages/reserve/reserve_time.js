@@ -1,5 +1,8 @@
 // reserve_time.js
 
+// 현재 선택된 날짜 셀 (클릭할 때마다 이전 선택 표시를 지우기 위해 기억해둠)
+let selectedDayEl = null;
+
 // 페이지 로드 시 실행 - 캘린더 초기화
 document.addEventListener("DOMContentLoaded", function () {
   const calendarEl = document.getElementById("calendar");
@@ -16,13 +19,29 @@ document.addEventListener("DOMContentLoaded", function () {
     locale: "ko",
     validRange: { start: tomorrowStr }, // 오늘 이전 선택 불가
     headerToolbar: { start: "prev", center: "title", end: "next" },
-    dateClick: (info) => applySelectedDate(info.dateStr),
+    // info.dayEl: 클릭한 날짜의 셀(td) → 선택 표시(class) 토글에 사용
+    dateClick: (info) => {
+      applySelectedDate(info.dateStr);
+      selectDayEl(info.dayEl);
+    },
   });
   calendar.render();
 
   // 페이지 진입 시 내일 날짜로 초기화
   applySelectedDate(tomorrowStr);
+  // 렌더 직후라 dateClick이 없으니, 내일 날짜 셀을 직접 찾아서 선택 표시
+  selectDayEl(calendarEl.querySelector(`[data-date="${tomorrowStr}"]`));
 });
+
+// 클릭된 날짜 셀에 "선택됨" 표시(class)를 옮겨줌
+// FullCalendar는 클릭한 날짜를 스스로 강조해주지 않아서, 이전 선택 셀의 class를 지우고
+// 새로 클릭한 셀에만 class를 붙이는 방식으로 "선택된 날짜 색 변경"을 구현했다.
+const selectDayEl = (dayEl) => {
+  if (!dayEl) return;
+  if (selectedDayEl) selectedDayEl.classList.remove("fc-day-selected");
+  dayEl.classList.add("fc-day-selected");
+  selectedDayEl = dayEl;
+};
 
 // 선택된 날짜를 화면에 반영 (hidden input + 헤더 + 슬롯 조회)
 const applySelectedDate = (dateStr) => {

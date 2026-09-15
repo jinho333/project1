@@ -52,7 +52,8 @@
       <form action="/reserve/complete" method="post" id="reserve-time-form">
 
         <!-- 1단계에서 넘어온 값 (hidden) -->
-        <input type="hidden" name="modelName" th:value="${reserveDTO.modelName}">
+        <!-- modelName(제품 모델명)은 1단계 폼에 입력칸 자체가 없어서 여기 넘겨봤자 항상 빈 값이었다.
+             서버(ReserveService.saveReserve)가 저장 시 categoryNo로 카테고리명을 조회해서 채워주므로 뺐다. -->
         <input type="hidden" name="symptom" th:value="${reserveDTO.symptom}">
         <input type="hidden" name="categoryNo" th:value="${reserveDTO.categoryNo}">
         <input type="hidden" name="visitAddr" th:value="${reserveDTO.visitAddr}">
@@ -92,7 +93,7 @@
             <!-- 하단 버튼 -->
             <div class="form-footer">
 
-              <a href="/reserve/form" class="btn btn-ghost btn-md">
+              <a href="/reserve/form" class="btn btn-ghost btn-lg">
                 <i class="bi bi-arrow-left"></i> 이전 단계
               </a>
 

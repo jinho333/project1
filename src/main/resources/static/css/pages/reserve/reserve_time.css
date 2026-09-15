@@ -4,7 +4,7 @@
 
 .time-wrap {
   display: flex;
-  gap: 32px;        
+  gap: 32px;
   padding: 40px;
 }
 
@@ -13,7 +13,7 @@
    ========================================================= */
 
 .calendar-area {
-  width: 560px;     
+  width: 560px;
   flex-shrink: 0;
 }
 
@@ -29,7 +29,7 @@
 
 .slot-area {
   flex: 1;
-  max-width: 400px;       /* 슬롯 영역 최대 너비 제한 */
+  max-width: 400px; /* 슬롯 영역 최대 너비 제한 */
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -39,14 +39,15 @@
    슬롯 헤더 (선택한 날짜 제목)
    ========================================================= */
 
+/* 캘린더 쪽 제목(.calendar-area > h3)은 밑줄 없이 margin-bottom:24px 하나로 본문과 간격을 두는데,
+   여기는 border-bottom(구분선)까지 있어서 같은 페이지 안에서 헤더 스타일이 서로 달라 보였다.
+   구분선을 없애고 캘린더 쪽과 동일하게 margin-bottom 24px 하나로 통일했다. */
 .slot-head {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   gap: 16px;
-  padding-bottom: 24px;
   margin-bottom: 24px;
-  border-bottom: 1px solid var(--color-border-light);
 }
 
 .slot-head h3 {
@@ -151,25 +152,24 @@
 
 /* =========================================================
    하단 버튼 영역
-   - 두 버튼(이전 단계 / 예약 확정하기)을 같은 크기로 통일
-   - hover 반응도 동일하게 통일
+   - .slot-area가 max-width:400px라 폭이 좁은데, 두 버튼을 좌우로 나란히 놓고
+     각각 flex:1(균등 분배)만 줬더니 텍스트가 줄바꿈되지 않아서(white-space:nowrap)
+     두 버튼의 최소 너비 합(약 265px + gap)이 실제 컨테이너 폭(약 232px)을 넘어 버튼이 넘쳤다.
+     좁은 폭에서도 안전하도록 세로로 쌓고, 각 버튼을 폭 100%로 바꿨다.
+   - 두 버튼 모두 HTML에서 btn-lg를 쓰고 있으므로 여기서는 크기(padding/font-size)를 따로
+     지정하지 않고 공통 .btn-lg 스타일(common.css)을 그대로 쓰게 둬서 둘이 같은 크기가 되도록 했다.
    ========================================================= */
 
 .slot-area .form-footer {
   margin-top: 40px;
   padding-top: 40px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column-reverse;
+  gap: 10px;
 }
 
-/* 두 버튼이 정확히 50:50 폭을 갖도록 균등 분배 */
 .slot-area .form-footer .btn {
-  flex: 1;
-  padding: 14px 20px;
-  font-size: 15px;
-  border-radius: var(--radius-md);
+  width: 100%;
   text-align: center;
   justify-content: center;
   transition:
@@ -178,11 +178,6 @@
     border-color 0.18s ease,
     box-shadow 0.18s ease,
     transform 0.18s ease;
-}
-
-/* 아이콘 크기 살짝 축소 */
-.slot-area .form-footer .btn i {
-  font-size: 14px;
 }
 
 /* 두 버튼 모두 hover 시 동일하게 위로 살짝 들림 */
@@ -226,4 +221,88 @@
 
 .fc .fc-icon {
   font-size: 1rem;
+}
+
+/* =========================================================
+   FullCalendar 날짜 셀 - 호버/선택 표시
+   - FullCalendar 7 "monarch" 테마는 fc-daygrid-day, fc-day-future 같은
+     의미 있는 클래스명을 안 쓰고 fc-1h, fc-MA 같은 난독화된 유틸리티 클래스만 붙인다.
+     그 클래스들로는 셀렉터를 못 짜므로, 실제 렌더링에는 항상 붙는
+     data-date 속성(선택 가능한 날짜 셀에만 존재)과, 클릭 시 JS(reserve_time.js: selectDayEl)가
+     직접 붙여주는 .fc-day-selected 클래스를 기준으로 스타일을 입혔다.
+   - !important: monarch 테마 CSS가 각 속성마다 전용 유틸 클래스를 세밀하게 걸어놔서
+     동일 우선순위로는 자꾸 덮어써지는 걸 확인했다. 그래서 확실히 이기도록 강제했다.
+   ========================================================= */
+
+/* 요일 헤더(일/월/화/수/목/금/토)
+   - 이 셀의 24px 높이는 monarch 테마가 CSS Grid의 행(row) 트랙 크기로 고정해둔 값이라,
+     자식 요소에 height:auto/overflow:visible을 줘도 안 먹힌다(grid-template-rows는 자식 높이로 안 바뀜).
+     font-size를 키워도 행 높이 자체가 그대로라 "티가 안 난다"고 느껴졌던 원인이 이것이었다.
+     레이아웃 크기(height)는 그대로 두고, transform:scale로 시각적으로만 확대해서 우회했다. */
+[role="columnheader"] {
+  font-weight: 600 !important;
+  transform: scale(1.3) !important;
+}
+
+/* data-date가 있는 셀 = 실제 선택 가능한 날짜 (당일/과거는 validRange가 아예 렌더링에서 제외함) */
+[data-date] {
+  cursor: pointer !important;
+}
+
+/* 셀 전체(사각형)를 채우면 밋밋해 보여서, 날짜 숫자를 감싸는 첫 번째 자식만 동그랗게 배지 처리했다
+   (구글 캘린더 등에서 흔히 쓰는 방식). 첫 자식이 항상 숫자 wrapper라 구조상 안전하게 선택할 수 있다.
+   - 셀 안에서 위치: position:absolute + top/left/right/bottom:0 + margin:auto 로 정중앙에 배치했다.
+     (transform: translate(-50%,-50%) 로 중앙 정렬을 시도했더니, monarch 테마가 이미 이 요소에
+      transform으로 hover/press 효과를 주고 있어서 서로 덮어써 버렸다. 그래서 transform을 안 쓰는
+      margin:auto 중앙정렬 방식으로 우회했다.) */
+[data-date] {
+  position: relative !important;
+}
+
+[data-date] > div:first-child {
+  position: absolute !important;
+  inset: 0 !important;
+  margin: auto !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% !important;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+[data-date] > div:first-child [aria-hidden] {
+  font-size: 15px !important;
+}
+
+[data-date]:hover > div:first-child {
+  background-color: var(--color-primary-pale) !important;
+}
+
+
+.fc-day-selected > div:first-child {
+  width: 44px !important;
+  height: 44px !important;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-light),
+    var(--color-primary)
+  ) !important;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+.fc-day-selected > div:first-child * {
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+/* 위의 보편(*) 선택자로 font-size를 주면, 더 구체적인 위쪽 기본 배지 규칙
+   ([data-date] > div:first-child [aria-hidden])이 동일 !important 상황에서 더 높은 우선순위로 이겨버린다.
+   그래서 같은 구체성으로 맞춰서 확실히 이기도록 했다. */
+.fc-day-selected > div:first-child [aria-hidden] {
+  font-size: 17px !important;
 }

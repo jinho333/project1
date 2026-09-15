@@ -78,10 +78,13 @@
                   </span>
                 </div>
 
+                <!-- modelName은 저장 시 categoryName으로 채워지기 때문에(ReserveService.saveReserve 참고),
+                     제목(modelName)과 부제목에 카테고리명을 같이 쓰면 "온수기 / 온수기 · 주소"처럼 중복 노출된다.
+                     그래서 부제목에서는 카테고리명을 빼고 주소만 표시한다. -->
                 <h3 th:text="${r.modelName}">삼성 무풍 에어컨</h3>
                 <p class="addr">
                   <i class="bi bi-geo-alt-fill"></i>
-                  <span th:text="${r.categoryName} + ' · ' + ${r.visitAddr} + ' ' + ${r.visitAddrDetail}"></span>
+                  <span th:text="${r.visitAddr} + ' ' + ${r.visitAddrDetail}"></span>
                 </p>
               </div>
             </div>
@@ -116,10 +119,13 @@
                 <i class="bi bi-x-circle"></i> 예약 취소
               </button>
               <!-- 리뷰 작성 (완료 탭만) -->
+              <!-- ReviewController가 /review/form/{reserveNo} 로 매핑돼 있는데
+                   전에는 존재하지 않는 /review/write로 보내서 404가 났었다. 리뷰는 예약 1건에 대해
+                   작성하는 거라 어떤 예약(reserveNo)에 대한 리뷰인지 컨트롤러가 알아야 해서 함께 전달한다. -->
               <button type="button"
                       class="btn btn-secondary btn-sm"
                       th:if="${r.reserveStatus == '9'}"
-                      onclick="location.href='/review/write';">
+                      th:onclick="|location.href='/review/form/${r.reserveNo}'|">
                 <i class="bi bi-star"></i> 리뷰 작성
               </button>
 

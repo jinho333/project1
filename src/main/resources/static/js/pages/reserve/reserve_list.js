@@ -8,6 +8,10 @@ const TAB_STATUS_MAP = {
 };
 
 // 탭 클릭 시 카드 필터링
+// 서버(reserve/list)가 로그인 회원의 예약을 상태 상관없이 전부 한 번에 내려주기 때문에,
+// 탭을 바꿀 때마다 서버에 다시 요청하지 않고 이미 화면에 있는 카드를 상태값 기준으로
+// 보였다 숨겼다 하는 방식으로 처리했다. 예약 건수가 적은(수십 건 이하) 서비스라
+// 전체를 한 번에 받아도 부담이 없다고 판단했다.
 const filterTab = (tab, el) => {
   // 탭 활성화 표시
   document.querySelectorAll("#tabList li").forEach((li) => {
@@ -76,7 +80,10 @@ const cancelReserve = async (reserveNo) => {
 
     if (data.success) {
       alert(data.message);
-      location.reload();   // 페이지 새로고침해서 상태 반영
+      // 취소된 카드 하나만 DOM에서 지우거나 상태를 바꿔줄 수도 있지만,
+      // 취소 후에는 "진행중" 탭 카드 개수도 바뀌고 상태 배지/버튼도 같이 바뀌어야 해서
+      // 부분 갱신 코드를 따로 짜는 것보다 전체 새로고침이 더 간단하고 확실하다고 판단.
+      location.reload();
     } else if (data.redirect) {
       location.href = data.redirect;
     } else {

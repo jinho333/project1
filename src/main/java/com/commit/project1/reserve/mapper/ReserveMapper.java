@@ -26,9 +26,6 @@ public interface ReserveMapper {
   // 예약 저장
   void insertReserve(ReserveDTO dto);
 
-  // 특정 날짜에 예약된 시간 목록 조회
-  List<String> selectReservedTimesByDate(String date);
-
   //로그인한 회원의 주소를 조회
   MemberDTO selectMember(String memId);
 
@@ -38,6 +35,9 @@ public interface ReserveMapper {
 
   //예약 페이지 카테고리 조회
   List<CategoryDTO> selectCategory(String productType);
+
+  // 카테고리 번호로 카테고리 단건 조회 (예약 저장 시 카테고리명을 모델명 자리에 채우기 위함)
+  CategoryDTO selectCategoryByNo(Long categoryNo);
 
   // 예약 상태 변경 (취소/배정/완료 등)
   int updateReserveStatus(ReserveDTO dto);

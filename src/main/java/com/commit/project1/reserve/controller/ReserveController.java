@@ -7,6 +7,7 @@ import com.commit.project1.reserve.service.ReserveService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -99,7 +100,7 @@ public class ReserveController {
 
     Map<String, Object> result = new HashMap<>();
 
-    // 1) 로그인 체크
+    // 로그인 체크
     // 로그인 안 된 상태로 URL 직접 접근 시 로그인 페이지로 보냄
     // (JS가 redirect 값을 받아 location.href 로 이동)
     MemberDTO login = (MemberDTO) session.getAttribute("loginInfo");
@@ -109,7 +110,7 @@ public class ReserveController {
       return result;
     }
 
-    // 2) 필수값 검증
+    // 필수값 검증
     // JS가 이미 검증하지만 개발자도구 조작 대비 서버도 검증
     if (dto.getReserveDate() == null || dto.getSlotNo() == null) {
       result.put("success", false);
@@ -117,7 +118,7 @@ public class ReserveController {
       return result;
     }
 
-    // 3) 비즈니스 검증 (서비스에 위임)
+    // 비즈니스 검증
     // validateReserve 반환 규칙:
     //   null    → 통과 , 문자열   → 실패 (문자열이 에러 메시지)
     String error = reserveService.validateReserve(dto);
@@ -127,16 +128,29 @@ public class ReserveController {
       return result;
     }
 
-    // 4) 저장
+    // 저장
     // memId / reserveStatus 는 서버가 강제 (사용자 조작 방지)
     dto.setMemId(login.getMemId());
     dto.setReserveStatus("0");       // '0' = 예약접수
-    reserveService.saveReserve(dto);
 
-    // 5) 성공 응답
+    // 검증과 저장 사이에는 시간차가 있어서
+    // 두 사용자가 동시에 같은 날짜+슬롯을 예약하면 둘 다 검증을 통과해버릴 수 있음(레이스 컨디션)
+    // → DB에 (RESERVE_DATE, SLOT_NO) 유니크 제약을 걸어서 마지막 방어선을 두고
+    // 여기서는 그 제약 위반을 사용자 에러 메시지로 바꿔서 응답
+    try {
+      reserveService.saveReserve(dto);
+    } catch (DataIntegrityViolationException e) {
+      result.put("success", false);
+      result.put("error", "이미 예약된 시간입니다.");
+      return result;
+    }
+
+    // 성공 응답
     // JS가 이 redirect 값을 받아 완료 페이지로 이동.
+    // mapper의 insertReserve가 useGeneratedKeys로 채번된 RESERVE_NO를 dto에 채워주므로,
+    // 완료 페이지가 "방금 등록한 이 예약"의 실제 정보를 보여줄 수 있게 번호를 같이 넘긴다.
     result.put("success", true);
-    result.put("redirect", "/reserve/complete-page");
+    result.put("redirect", "/reserve/complete-page?reserveNo=" + dto.getReserveNo());
     return result;
   }
 
@@ -144,14 +158,23 @@ public class ReserveController {
   // GET이 없으면 완료 화면 이동 시 404가 뜸
   // (redirect 값이 "/reserve/complete-page")
   @GetMapping("/complete-page")
-  public String completePage() {
+  public String completePage(@RequestParam(value = "reserveNo", required = false) Long reserveNo,
+                              HttpSession session, Model model) {
+
+    // reserveNo가 없거나(직접 URL 접근 등) 남의 예약 번호면 실제 데이터를 보여주지 않음
+    // → 이 경우 템플릿의 기본 안내 문구만 보이도록 model에 아무것도 안 담고 넘어감
+    MemberDTO login = (MemberDTO) session.getAttribute("loginInfo");
+    if (reserveNo != null && login != null) {
+      ReserveDTO reserve = reserveService.getReserveByNo(reserveNo);
+      if (reserve != null && login.getMemId().equals(reserve.getMemId())) {
+        model.addAttribute("reserve", reserve);
+      }
+    }
+
     return "pages/reserve/reserve_complete";
   }
 
-  // [API] 예약 취소 (AJAX)
-  //   성공        : { "success": true,  "message": "예약이 취소되었습니다." }
-  //   로그인 실패 : { "success": false, "redirect": "/member/login-form" }
-  //   검증 실패   : { "success": false, "error": "취소할 수 없는 예약입니다." }
+  // API - 예약 취소
   @PostMapping("/cancel")
   @ResponseBody
   public Map<String, Object> cancelReserve(@RequestParam("reserveNo") Long reserveNo,
