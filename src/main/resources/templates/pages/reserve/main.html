@@ -43,12 +43,12 @@
       <!-- 카드2 : 진행 중인 예약 -->
       <th:block th:if="${session.loginInfo != null}">
         <div class="card card-lg reserve-card">
-          <span class="side-line" th:classappend="${reserves[0].productType == '냉방'} ? 'product-cool' : ''"></span>
+          <span class="side-line"></span>
           <div class="reserve-head">
             <div>
               <p class="label">진행 중인 예약</p>
               <th:block th:if="${#lists.size(reserves) >= 2}">
-                <p><a href="/reserve/list" class="label">+ 다른 예약 [[${#lists.size(reserves) - 1}]]건 더 보기</a></p>
+                <p><a href="/reserve/list" class="label">+ 다른 예약 [[${#lists.size(reserves.?[reserveStatus == '0'])}]]건 더 보기</a></p>
               </th:block>
             </div>
             
@@ -56,7 +56,8 @@
           </div>
           <div class="reserve-body">
             <div class="product-icon">
-              <i class="bi bi-snow2"></i>
+              <i class="bi"
+                   th:classappend="${reserves[0].productType == '난방' ? 'bi-thermometer-high' : 'bi-snow2'}"></i>
             </div>
             <div>
               <!-- <span class="badge badge-orange animate-pulse">이동 중</span> -->

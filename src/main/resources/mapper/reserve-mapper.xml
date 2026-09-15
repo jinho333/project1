@@ -171,12 +171,12 @@
     JOIN TIME_SLOT T ON R.SLOT_NO = T.SLOT_NO
     JOIN CATEGORY C ON R.CATEGORY_NO = C.CATEGORY_NO
     WHERE R.MEM_ID = #{memId}
-    ORDER BY R.RESERVE_DATE DESC, R.SLOT_NO DESC
+    ORDER BY R.RESERVE_DATE ASC, R.SLOT_NO DESC
   </select>
 
   <!--카테고리별 예약 내역 건수 조회-->
   <select id="countReserveByCate" resultType="hashmap">
-    SELECT COUNT(C.CATEGORY_NO) AS reserveCount,
+    SELECT COUNT(R.CATEGORY_NO) AS reserveCount,
     CATEGORY_NAME AS categoryName
     FROM RESERVE R
     RIGHT OUTER JOIN CATEGORY C
