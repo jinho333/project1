@@ -19,6 +19,7 @@ public class AdminController {
     model.addAttribute("reserves", reserveService.selectReserves());
     model.addAttribute("reviews", reviewService.selectReviews());
     model.addAttribute("reviewStats", reviewService.selectStats());
+    model.addAttribute("countByCate", reserveService.countReserveByCate());
     return "pages/admin/dash_board";
   }
 

@@ -7,6 +7,7 @@ import com.commit.project1.reserve.dto.TimeSlotDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ReserveMapper {
@@ -41,6 +42,8 @@ public interface ReserveMapper {
 
   // 예약 상태 변경 (취소/배정/완료 등)
   int updateReserveStatus(ReserveDTO dto);
+
+  List<Map<String, Object>>countReserveByCate();
 
 
 

@@ -95,8 +95,8 @@
         
         <div class="chart-head">
           <div>
-            <h2>카테고리별 처리 건수 (Top 5)</h2>
-            <p>이번 주 누적 처리 완료 기준</p>
+            <h2>카테고리별 처리 건수 비율 (Top 5)</h2>
+            <p>누적 처리 완료 기준</p>
           </div>
           <button type="button" class="btn btn-secondary btn-sm">
             더보기 <i class="bi bi-chevron-right"></i>
@@ -105,23 +105,25 @@
 
         <div class="bar-chart">
           <div class="y-axis">
-            <span>40</span><span>30</span><span>20</span><span>10</span><span>0</span>
+            <span>90</span><span>70</span><span>50</span><span>20</span><span>0</span>
           </div>
-          <div class="bar-list">
-            <div class="bar-item"><div class="bar" style="height:95%; background:var(--color-primary);"></div></div>
-            <div class="bar-item"><div class="bar" style="height:80%; background:var(--color-primary-light);"></div></div>
-            <div class="bar-item"><div class="bar" style="height:70%; background:#60A5FA;"></div></div>
-            <div class="bar-item"><div class="bar" style="height:60%; background:var(--color-primary-soft);"></div></div>
-            <div class="bar-item"><div class="bar" style="height:45%; background:var(--color-primary-pale);"></div></div>
+          <div class="bar-list" 
+          th:with=
+          "ratio1 = ${countByCate[0].reserveCount*100/#lists.size(reserves)},
+          ratio2 = ${countByCate[1].reserveCount*100/#lists.size(reserves)},
+          ratio3 = ${countByCate[2].reserveCount*100/#lists.size(reserves)},
+          ratio4 = ${countByCate[3].reserveCount*100/#lists.size(reserves)},
+          ratio5 = ${countByCate[4].reserveCount*100/#lists.size(reserves)}">
+            <div class="bar-item"><div class="bar" th:style="|height:${ratio1}%; background:var(--color-primary);|"></div></div>
+            <div class="bar-item"><div class="bar" th:style="|height:${ratio2}%; background:var(--color-primary-light);|"></div></div>
+            <div class="bar-item"><div class="bar" th:style="|height:${ratio3}%; background:#60A5FA;|"></div></div>
+            <div class="bar-item"><div class="bar" th:style="|height:${ratio4}%; background:var(--color-primary-soft);|"></div></div>
+            <div class="bar-item"><div class="bar" th:style="|height:${ratio5}%; background:var(--color-primary-pale);|"></div></div>
           </div>
         </div>
 
         <div class="bar-labels">
-          <div><p class="name">김철수</p><p class="area">강남구</p></div>
-          <div><p class="name">이영희</p><p class="area">서초구</p></div>
-          <div><p class="name">박지성</p><p class="area">송파구</p></div>
-          <div><p class="name">정우성</p><p class="area">마포구</p></div>
-          <div><p class="name">최민호</p><p class="area">용산구</p></div>
+          <div th:each="count, state : ${countByCate}" th:if="${state.count &lt;= 5}"><p class="name">[[${count.categoryName}]]</p></div>
         </div>
       </div>
 
