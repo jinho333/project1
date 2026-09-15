@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -109,6 +110,10 @@ public class ReserveService {
 
     // 모든 검증을 통과 → null 반환 , 호출한 쪽에서 null을 받으면 성공 으로 해석
     return null;
+  }
+
+  public List<Map<String, Object>>countReserveByCate(){
+    return reserveMapper.countReserveByCate();
   }
 
 }
