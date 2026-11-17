@@ -23,7 +23,6 @@
 - **관리자 대시보드 통계**: 예약 접수 건수, 카테고리별 건수, 리뷰 통계를 쿼리 한 번씩으로 집계
 - 공통 UI 스타일(`common.css`, `reset.css`) 
 
-동시 예약 방지(자바 사전 검사 + DB 유니크 제약)는 팀원이 구현했습니다. 저는 구현자가 아니라 팀장으로 팀의 기능을 취합했습니다.
 
 ## 핵심 코드
 
@@ -47,7 +46,7 @@
 
 ## 기술 스택
 
-Java 17 · Spring Boot · MyBatis · Thymeleaf · MariaDB · JavaScript(axios) · FullCalendar · Gradle
+Java 17 · Spring Boot · MyBatis · Thymeleaf · MariaDB · JavaScript(axios) · FullCalendar 
 
 ## 구조
 
@@ -73,11 +72,7 @@ src/main/resources
 ./gradlew bootRun
 ```
 
-## 한계와 다음 단계
 
-- 자동 테스트가 애플리케이션 로드 테스트 하나뿐이라 통계 쿼리를 테스트로 고정하지 못했습니다.
-- 통계는 요청마다 전체 테이블을 집계합니다. 데이터가 커지면 느려질 수 있고 측정하지 않았습니다.
-- 동시 예약은 제출한 뒤에야 거절을 알게 되므로, 일정 선택 시점에 알려 주는 구조(예: Redis 슬롯 홀딩)가 다음 과제입니다.
 
 ## 기록
 
