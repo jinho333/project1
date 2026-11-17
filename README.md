@@ -34,7 +34,7 @@ src/main/resources
 └─ static    CSS · JS
 ```
 
-## 제가 맡은 부분
+## 맡은 부분
 
 - 메인 화면(예약일 표시) · 로그아웃, 예약 조회 · 시간 선택 화면
 - **리뷰 도메인 전체**: DB 설계, Spring(Controller · Service · Mapper), 리뷰 작성 화면
@@ -61,20 +61,6 @@ src/main/resources
 ```
 
 `HashMap`으로 받아 DTO를 만들지 않은 대신 타입 안정성은 포기했습니다.
-
-
-
-## 실행
-
-1. MariaDB에 `project-1` 데이터베이스를 준비합니다. (스키마 SQL은 이 저장소에 없습니다.)
-2. `src/main/resources/application.yaml`의 DB 접속 정보와 업로드 경로(`file.upload.dir`)를 본인 환경에 맞게 고칩니다.
-3. 실행합니다.
-
-```bash
-./gradlew bootRun
-```
-
-
 
 ## 기록
 
