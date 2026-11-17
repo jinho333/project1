@@ -16,6 +16,24 @@
 | 예약 흐름 | 제품 → 일정 → 확정의 3단계 화면 (FullCalendar, axios 비동기) |
 | 데이터 | `RESERVE` 테이블 중심으로 5개 테이블 연결 |
 
+## 기술 스택
+
+Java 17 · Spring Boot · MyBatis · Thymeleaf · MariaDB · JavaScript(axios) · FullCalendar 
+
+## 구조
+
+```
+src/main/java/com/commit/project1
+├─ member    회원 · 로그인
+├─ reserve   예약 (Controller / Service / Mapper / DTO)
+├─ review    리뷰
+└─ admin     관리자 대시보드
+src/main/resources
+├─ mapper    MyBatis XML
+├─ templates Thymeleaf (layouts / pages)
+└─ static    CSS · JS
+```
+
 ## 제가 맡은 부분
 
 - 메인 화면(예약일 표시) · 로그아웃, 예약 조회 · 시간 선택 화면
@@ -44,23 +62,7 @@
 
 `HashMap`으로 받아 DTO를 만들지 않은 대신 타입 안정성은 포기했습니다.
 
-## 기술 스택
 
-Java 17 · Spring Boot · MyBatis · Thymeleaf · MariaDB · JavaScript(axios) · FullCalendar 
-
-## 구조
-
-```
-src/main/java/com/commit/project1
-├─ member    회원 · 로그인
-├─ reserve   예약 (Controller / Service / Mapper / DTO)
-├─ review    리뷰
-└─ admin     관리자 대시보드
-src/main/resources
-├─ mapper    MyBatis XML
-├─ templates Thymeleaf (layouts / pages)
-└─ static    CSS · JS
-```
 
 ## 실행
 
